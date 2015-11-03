@@ -1,14 +1,14 @@
-package com.davidtschida.materialdiningcourts;
+package com.davidtschida.materialdiningcourts.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.davidtschida.materialdiningcourts.R;
 import com.davidtschida.purduemenu.models.Meal;
 
 import java.util.List;

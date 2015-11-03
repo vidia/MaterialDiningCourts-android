@@ -1,38 +1,19 @@
-package com.davidtschida.materialdiningcourts;
+package com.davidtschida.materialdiningcourts.activities;
 
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
-import android.support.v4.view.PagerTitleStrip;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
-import android.widget.TextView;
-
-import com.davidtschida.purduemenu.MenuService;
-import com.davidtschida.purduemenu.models.DiningLocation;
-import com.davidtschida.purduemenu.models.Locations;
-
-import java.util.List;
-
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
+import com.davidtschida.materialdiningcourts.R;
+import com.davidtschida.materialdiningcourts.adapters.DiningCourtPagerAdapter;
 
 public class MealViewActivity extends AppCompatActivity {
 

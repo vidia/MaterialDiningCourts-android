@@ -1,8 +1,10 @@
-package com.davidtschida.materialdiningcourts;
+package com.davidtschida.materialdiningcourts.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.davidtschida.materialdiningcourts.fragments.PlaceholderFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;

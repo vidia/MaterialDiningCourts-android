@@ -6,18 +6,45 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".MealViewActivity$PlaceholderFragment">
+    tools:context=".fragments.PlaceholderFragment"
+    android:background="#e3e3e3">
 
     <TextView
         android:id="@+id/section_label"
         android:layout_width="wrap_content"
+        android:visibility="gone"
         android:layout_height="wrap_content" />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/mealsList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical">
 
-    </android.support.v7.widget.RecyclerView>
+    <!-- A CardView that contains a TextView -->
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:padding="5dp"
+        card_view:cardCornerRadius="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:textAppearance="@android:style/TextAppearance.Material.Large"
+                android:text="Breakfast"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/mealsList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"/>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
 
 </RelativeLayout>
