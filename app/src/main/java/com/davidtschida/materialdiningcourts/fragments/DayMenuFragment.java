@@ -77,17 +77,24 @@ public class DayMenuFragment extends Fragment {
 
     @Override
     public void onStart() {
-        super.onResume();
+        super.onStart();
+        Log.d(TAG, "Fragment " + mDiningCourt + " onStart()");
 
+        if(!haveQueriedApi)
+            populateDataFromApi();
+    }
+
+    private void populateDataFromApi() {
+        Log.i(TAG, "Requesting getDiningMenu(" + mDiningCourt + ", " + mDateString + ")");
         MenusApi.getApiService().getDiningMenu(mDiningCourt, mDateString)
                 .enqueue(new Callback<DayMenu>() {
                     @Override
                     public void onResponse(Response<DayMenu> response, Retrofit retrofit) {
                         Log.d(TAG, "Got a response for the menu");
                         haveQueriedApi = true;
-                        Meal meal = response.body().getMealByName(mMealName);
+                        mMeal = response.body().getMealByName(mMealName);
 
-                        mFoodItems = meal.getAllFoodItems();
+                        mFoodItems = mMeal.getAllFoodItems();
                         Log.d(TAG, "There are (" + mFoodItems.size() + ") total foods.");
 
                         setAdapterForFoodItems();
@@ -95,7 +102,7 @@ public class DayMenuFragment extends Fragment {
 
                     @Override
                     public void onFailure(Throwable t) {
-                        Log.e(TAG, "Menus API threw an error", t);
+                        Log.e(TAG, "Menus API threw an error after requesting getDiningMenu(" + mDiningCourt + ", " + mDateString + ")", t);
                     }
                 });
     }
@@ -110,6 +117,7 @@ public class DayMenuFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(TAG, "Fragment " + mDiningCourt + " onResume()");
 
         if(haveQueriedApi) {
             setAdapterForFoodItems();
@@ -119,6 +127,7 @@ public class DayMenuFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "Fragment " + mDiningCourt + " onCreateView()");
         View rootView = inflater.inflate(R.layout.fragment_meal_view, container, false);
 
         mEntreeItemsRecycleView = (RecyclerView) rootView.findViewById(R.id.entreesList);

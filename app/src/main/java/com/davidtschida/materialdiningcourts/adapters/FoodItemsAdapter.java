@@ -2,7 +2,6 @@ package com.davidtschida.materialdiningcourts.adapters;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +42,6 @@ public class FoodItemsAdapter extends RecyclerView.Adapter<FoodItemsAdapter.View
     @Override
     public FoodItemsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                           int viewType) {
-        Log.d(TAG, "onCreateVieHolder()");
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.food_list_item, parent, false);
