@@ -1,5 +1,6 @@
 package com.davidtschida.purduemenu.models;
 
+import com.davidtschida.purduemenu.exceptions.MealDoesNotExistException;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -22,4 +23,13 @@ public class DayMenu {
 
     @SerializedName("Meals")
     List<Meal> meals;
+
+    public Meal getMealByName(String mealName) {
+        for(Meal meal : getMeals()) {
+            if(meal.getName().equalsIgnoreCase(mealName)) {
+                return meal;
+            }
+        }
+        throw new MealDoesNotExistException("The meal, " + mealName + ", does not exist for this day or is not a valid meal.");
+    }
 }

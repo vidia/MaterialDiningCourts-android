@@ -3,8 +3,12 @@ package com.davidtschida.materialdiningcourts.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
-import com.davidtschida.materialdiningcourts.fragments.PlaceholderFragment;
+import com.davidtschida.materialdiningcourts.fragments.DayMenuFragment;
+import com.davidtschida.purduemenu.models.Meal;
+
+import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +19,7 @@ import java.util.Arrays;
  */
 public class DiningCourtPagerAdapter extends FragmentPagerAdapter {
 
+    private static final String TAG = "DiningCourtPagerAdapter";
     private ArrayList<String> mDiningCourts = new ArrayList<>();
 
     public DiningCourtPagerAdapter(FragmentManager fm) {
@@ -25,8 +30,12 @@ public class DiningCourtPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(mDiningCourts.get((position)));
+        // Return a DayMenuFragment (defined as a static inner class below).
+
+        LocalDate today = LocalDate.now();
+        String formattedDate = today.toString("MM-dd-yyyy");
+        Log.d(TAG, "Using the date: " + formattedDate + " for the menus");
+        return DayMenuFragment.newInstance(mDiningCourts.get(position), Meal.LUNCH, formattedDate);
     }
 
     @Override

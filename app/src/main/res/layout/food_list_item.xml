@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/simpleItemTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        tools:text="Hamburgers"
+        />
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@+id/favoritesHeart"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="{fa-heart}"
+        android:layout_centerVertical="true"
+        android:textSize="20sp"
+        android:textColor="@color/red"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        tools:text="13"
+        android:paddingEnd="7dp"
+        android:textColor="@color/red"
+        android:layout_toStartOf="@+id/favoritesHeart"/>
+
+</RelativeLayout>
