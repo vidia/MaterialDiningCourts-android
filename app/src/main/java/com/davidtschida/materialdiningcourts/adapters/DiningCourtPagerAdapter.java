@@ -48,4 +48,6 @@ public class DiningCourtPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         return mDiningCourts.get(position);
     }
+
+
 }

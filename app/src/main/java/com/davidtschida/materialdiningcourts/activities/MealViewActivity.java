@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -14,8 +15,12 @@ import android.view.View;
 
 import com.davidtschida.materialdiningcourts.R;
 import com.davidtschida.materialdiningcourts.adapters.DiningCourtPagerAdapter;
+import com.davidtschida.materialdiningcourts.fragments.DatePickerFragment;
 
-public class MealViewActivity extends AppCompatActivity {
+public class MealViewActivity
+        extends AppCompatActivity
+        //implements DatePickerDialog.OnDateSetListener
+{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -37,9 +42,8 @@ public class MealViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_view);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("Breakfast");
+        setupToolbar();
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new DiningCourtPagerAdapter(getSupportFragmentManager());
@@ -62,6 +66,12 @@ public class MealViewActivity extends AppCompatActivity {
         });
     }
 
+    private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Breakfast"); //We just set it above this. Ignore warning
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -77,7 +87,11 @@ public class MealViewActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_pick_date) {
+
+            DialogFragment newFragment = new DatePickerFragment();
+            newFragment.show(getSupportFragmentManager(), "datePicker");
+
             return true;
         }
 

@@ -27,8 +27,7 @@
         android:id="@+id/entreesList"
         android:layout_below="@+id/entreeHeader"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/food_list_item"
-        android:scrollbars="vertical"/>
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/food_list_item"/>
 
 </RelativeLayout>
