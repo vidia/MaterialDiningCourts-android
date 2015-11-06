@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
 import com.davidtschida.materialdiningcourts.fragments.DayMenuFragment;
-import com.davidtschida.purduemenu.models.Meal;
 
 import org.joda.time.LocalDate;
 
@@ -35,7 +34,7 @@ public class DiningCourtPagerAdapter extends FragmentPagerAdapter {
         LocalDate today = LocalDate.now();
         String formattedDate = today.toString("MM-dd-yyyy");
         Log.d(TAG, "Using the date: " + formattedDate + " for the menus");
-        return DayMenuFragment.newInstance(mDiningCourts.get(position), Meal.LUNCH, formattedDate);
+        return DayMenuFragment.newInstance(mDiningCourts.get(position), today);
     }
 
     @Override
@@ -48,6 +47,8 @@ public class DiningCourtPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         return mDiningCourts.get(position);
     }
+
+
 
 
 }

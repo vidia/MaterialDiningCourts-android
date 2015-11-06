@@ -69,7 +69,7 @@ public class MealViewActivity
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Breakfast"); //We just set it above this. Ignore warning
+        getSupportActionBar().setTitle("Menus"); //We just set it above this. Ignore warning
     }
 
     @Override
@@ -97,8 +97,4 @@ public class MealViewActivity
 
         return super.onOptionsItemSelected(item);
     }
-
-
-
-
 }

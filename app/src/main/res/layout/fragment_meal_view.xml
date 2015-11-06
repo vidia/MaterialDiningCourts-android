@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:background="#e5e5e5"
-        android:text="Open until 8:00pm"/>
+        tools:text="Open until 8:00pm"/>
 
     <TextView
         android:id="@+id/entreeHeader"
