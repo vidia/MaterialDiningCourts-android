@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#FFCC2A41</color>
+    <color name="colorPrimaryDark">#FF961B2C</color>
+    <color name="textColorPrimary">#FFFFFFFF</color>
+    <color name="windowBackground">#FFFFFFFF</color>
+
+    <color name="hoursTextBackground">#91e5e5e5</color>
+    <color name="foodHeadingTextColor">#FF64908A</color>
+    <color name="favoriteColor">#FFCC2A41</color>
+    <color name="favoriteNotSelected">#59000000</color>
+
+    <color name="foodItemTextColor">#DE140912</color>
+    <color name="tabSelectedTextColor">#FFFFFFFF</color>
+    <color name="tabUnselectedTextColor">#B3FFFFFF</color>
+    <color name="tabSelectedIndicatorColor">#FFE8CAA4</color>
+
     <color name="colorAccent">#FF4081</color>
     <color name="red">#f00</color>
+
+    <color name="white">#FFFFFFFF</color>
+    <color name="tabIndicatorColor">#FFE8CAA4</color>
 </resources>
