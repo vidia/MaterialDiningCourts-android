@@ -1,6 +1,7 @@
 package com.davidtschida.purduemenu.models;
 
 import com.google.gson.annotations.SerializedName;
+import com.orm.SugarRecord;
 
 import org.joda.time.LocalTime;
 
@@ -8,12 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Created by david on 10/22/2015.
  */
 @Data
-public class Meal {
+@EqualsAndHashCode(callSuper=false)
+public class Meal extends SugarRecord<Meal> {
     public static String BREAKFAST = "breakfast";
     public static String LUNCH = "lunch";
     public static String LATE_LUNCH = "late lunch";
@@ -25,7 +28,7 @@ public class Meal {
     String name;
 
     @SerializedName("Order")
-    int order;
+    int mealOrder;
 
     @SerializedName("Status")
     String status;

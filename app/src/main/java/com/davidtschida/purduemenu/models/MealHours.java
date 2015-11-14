@@ -1,6 +1,7 @@
 package com.davidtschida.purduemenu.models;
 
 import com.google.gson.annotations.SerializedName;
+import com.orm.SugarRecord;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -8,12 +9,14 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Created by david on 10/22/2015.
  */
 @Data
-public class MealHours {
+@EqualsAndHashCode(callSuper=false)
+public class MealHours extends SugarRecord<MealHours> {
     @SerializedName("StartTime")
     String startTime;
 

@@ -152,6 +152,7 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
         if(mMealName == null) {
             Log.d(TAG + mDiningCourt, "No meal was given, getting meal from time");
             mMeal = response.body().getMealForTime(LocalTime.now());
+
             Log.d(TAG + mDiningCourt, "Received meal " + ((mMeal == null) ? "NULL" : mMeal.getName()));
 
             if(mMeal == null) {

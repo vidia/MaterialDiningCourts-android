@@ -4,18 +4,21 @@ import android.util.Log;
 
 import com.davidtschida.purduemenu.exceptions.MealDoesNotExistException;
 import com.google.gson.annotations.SerializedName;
+import com.orm.SugarRecord;
 
 import org.joda.time.LocalTime;
 
 import java.util.List;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Created by david on 10/22/2015.
  */
 @Data
-public class DayMenu {
+@EqualsAndHashCode(callSuper=false)
+public class DayMenu extends SugarRecord<DayMenu> {
     private static final String TAG = "DayMenu";
 
     @SerializedName("Location")
