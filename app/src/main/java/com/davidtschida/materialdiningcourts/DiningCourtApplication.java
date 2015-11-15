@@ -7,6 +7,8 @@ import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
+import timber.log.Timber;
+
 /**
  * Created by david on 11/3/2015.
  */
@@ -16,5 +18,8 @@ public class DiningCourtApplication extends Application {
         super.onCreate();
         Iconify.with(new FontAwesomeModule());
         JodaTimeAndroid.init(this);
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
     }
 }
