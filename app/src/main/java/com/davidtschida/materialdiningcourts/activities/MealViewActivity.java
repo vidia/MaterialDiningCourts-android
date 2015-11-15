@@ -1,8 +1,6 @@
 package com.davidtschida.materialdiningcourts.activities;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,11 +9,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.davidtschida.materialdiningcourts.R;
 import com.davidtschida.materialdiningcourts.adapters.DiningCourtPagerAdapter;
 import com.davidtschida.materialdiningcourts.fragments.DatePickerFragment;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class MealViewActivity
         extends AppCompatActivity
@@ -35,41 +38,43 @@ public class MealViewActivity
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    @Bind(R.id.container) protected ViewPager mViewPager;
+    @Bind(R.id.tabs) protected TabLayout tabLayout;
+    @Bind(R.id.meal_chooser_spinner) protected Spinner mMealSpinner;
+    @Bind(R.id.toolbar) protected Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_view);
+        ButterKnife.bind(this);
 
         setupToolbar();
+
+        Timber.d("onCreate()");
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new DiningCourtPagerAdapter(getSupportFragmentManager());
-
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(mViewPager);
 
+        //mMealSpinner.setAdapter(new MealsSpinnerAdapter());
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.meals_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        mMealSpinner.setAdapter(adapter);
+        mMealSpinner.setOnItemSelectedListener(mSectionsPagerAdapter);
     }
 
     private void setupToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Menus"); //We just set it above this. Ignore warning
@@ -93,7 +98,6 @@ public class MealViewActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_pick_date) {
-
             DialogFragment newFragment = new DatePickerFragment();
             newFragment.show(getSupportFragmentManager(), "datePicker");
 

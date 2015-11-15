@@ -3,7 +3,8 @@ package com.davidtschida.materialdiningcourts.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.davidtschida.materialdiningcourts.fragments.DayMenuFragment;
 
@@ -11,30 +12,36 @@ import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class DiningCourtPagerAdapter extends FragmentPagerAdapter {
+public class DiningCourtPagerAdapter extends FragmentPagerAdapter implements AdapterView.OnItemSelectedListener {
 
     private static final String TAG = "DiningCourtPagerAdapter";
+    private String mMealString;
     private ArrayList<String> mDiningCourts = new ArrayList<>();
+
+    private List<DayMenuFragment> mFragments = new ArrayList<DayMenuFragment>();
 
     public DiningCourtPagerAdapter(FragmentManager fm) {
         super(fm);
         mDiningCourts.addAll(Arrays.asList("Wiley", "Windsor", "Ford", "Hillenbrand", "Earhart"));
+
+        LocalDate today = LocalDate.now();
+
+        for(String court : mDiningCourts) {
+            mFragments.add(DayMenuFragment.newInstance(court, today));
+        }
     }
 
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a DayMenuFragment (defined as a static inner class below).
-
-        LocalDate today = LocalDate.now();
-        String formattedDate = today.toString("MM-dd-yyyy");
-        Log.d(TAG, "Using the date: " + formattedDate + " for the menus");
-        return DayMenuFragment.newInstance(mDiningCourts.get(position), today);
+        return mFragments.get(position);
     }
 
     @Override
@@ -51,4 +58,18 @@ public class DiningCourtPagerAdapter extends FragmentPagerAdapter {
 
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Timber.d("Meal was selected " + position);
+        mMealString = (String) parent.getAdapter().getItem(position);
+        for(DayMenuFragment frag : mFragments) {
+            frag.setMeal(mMealString);
+        }
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        Timber.d("OnNothingSelected()");
+    }
 }

@@ -25,6 +25,7 @@ import java.util.List;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
+import timber.log.Timber;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -49,6 +50,7 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
     private List<FoodItem> mFoodItems;
     private FoodItemsAdapter mFoodItemsAdapter;
     private String mHoursDisplayText;
+    private String mMealString;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -102,9 +104,11 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
     }
 
     private void populateDataFromApi() {
-        Log.i(TAG, "Requesting getDiningMenu(" + mDiningCourt + ", " + mLocalDate.toString("MM-dd-yyyy") + ")");
-        MenusApi.getApiService().getDiningMenu(mDiningCourt, mLocalDate.toString("MM-dd-yyyy"))
-                .enqueue(this);
+        if(mMeal == null) {
+            Timber.i("Requesting getDiningMenu(" + mDiningCourt + ", " + mLocalDate.toString("MM-dd-yyyy") + ")");
+            MenusApi.getApiService().getDiningMenu(mDiningCourt, mLocalDate.toString("MM-dd-yyyy"))
+                    .enqueue(this);
+        }
     }
 
     private void setAdapterForFoodItems() {
@@ -191,5 +195,16 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
     public void setHoursDisplayText(String hoursDisplayString) {
         this.mHoursDisplayText = hoursDisplayString;
         refreshDisplayText();
+    }
+
+    public void setMeal(String meal) {
+        mMealString = meal;
+        mMeal = null;
+        mFoodItems = null;
+        mHoursDisplayText = null;
+
+        if(haveQueriedApi) {
+            populateDataFromApi();
+        }
     }
 }

@@ -2,4 +2,12 @@
     <string name="app_name">MaterialDiningCourts</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$s</string>
+
+    <!-- Temporary static list of locations. This should be populated from the api...eventually. -->
+    <string-array name="meals_array">
+        <item>Breakfast</item>
+        <item>Lunch</item>
+        <item>Late Lunch</item>
+        <item>Dinner</item>
+    </string-array>
 </resources>
