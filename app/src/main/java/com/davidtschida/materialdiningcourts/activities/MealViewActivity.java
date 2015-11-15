@@ -56,6 +56,8 @@ public class MealViewActivity
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(mViewPager);
 
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +71,10 @@ public class MealViewActivity
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Menus"); //We just set it above this. Ignore warning
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Menus"); //We just set it above this. Ignore warning
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
     }
 
     @Override
