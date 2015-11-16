@@ -145,6 +145,9 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
         mEntreeItemsRecycleView = (RecyclerView) rootView.findViewById(R.id.entreesList);
         mEntreeItemsRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        //mEntreeItemsRecycleView.setNestedScrollingEnabled(false);
+        mEntreeItemsRecycleView.setHasFixedSize(true);
+
         return rootView;
     }
 

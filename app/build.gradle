@@ -27,7 +27,8 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:2.0.0-beta2' //For creating an API client
     compile 'com.squareup.retrofit:converter-gson:+' //TODO: lock in version
     compile 'com.android.support:recyclerview-v7:23.1.0'
-    compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.1.0' //For icons like the favorites heart
+    compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.1.0'
+    //For icons like the favorites heart
     compile 'net.danlew:android.joda:2.9.0' //Because android and java time classes suck
     provided "org.projectlombok:lombok:1.16.4" //For annotations like @Data to help with POJOs
     //Install this to use the following: https://bitbucket.org/hvisser/android-apt

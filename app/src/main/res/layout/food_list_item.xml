@@ -14,8 +14,7 @@
         android:layout_centerVertical="true"
         android:textSize="16sp"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        tools:text="Hamburgers"
-        />
+        tools:text="Hamburgers" />
 
     <com.joanzapata.iconify.widget.IconTextView
         android:id="@+id/favoritesHeart"
@@ -25,7 +24,7 @@
         android:text="{fa-heart}"
         android:layout_centerVertical="true"
         android:textSize="20sp"
-        android:textColor="@color/favoriteNotSelected"/>
+        android:textColor="@color/favoriteNotSelected" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,6 +34,6 @@
         tools:text="13"
         android:paddingEnd="3dp"
         android:textColor="@color/favoriteNotSelected"
-        android:layout_toStartOf="@+id/favoritesHeart"/>
+        android:layout_toStartOf="@+id/favoritesHeart" />
 
 </RelativeLayout>

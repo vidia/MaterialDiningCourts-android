@@ -3,8 +3,6 @@ package com.davidtschida.materialdiningcourts.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.View;
-import android.widget.AdapterView;
 
 import com.davidtschida.materialdiningcourts.fragments.DayMenuFragment;
 
@@ -14,28 +12,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import timber.log.Timber;
-
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class DiningCourtPagerAdapter extends FragmentPagerAdapter implements AdapterView.OnItemSelectedListener {
+public class DiningCourtPagerAdapter extends FragmentPagerAdapter {
 
-    private static final String TAG = "DiningCourtPagerAdapter";
-    private String mMealString;
     private ArrayList<String> mDiningCourts = new ArrayList<>();
-
     private List<DayMenuFragment> mFragments = new ArrayList<DayMenuFragment>();
 
-    public DiningCourtPagerAdapter(FragmentManager fm) {
+    public DiningCourtPagerAdapter(FragmentManager fm, String mealString) {
         super(fm);
         mDiningCourts.addAll(Arrays.asList("Wiley", "Windsor", "Ford", "Hillenbrand", "Earhart"));
 
         LocalDate today = LocalDate.now();
 
         for(String court : mDiningCourts) {
-            mFragments.add(DayMenuFragment.newInstance(court, today));
+            mFragments.add(DayMenuFragment.newInstance(court, mealString, today));
         }
     }
 
@@ -46,7 +39,6 @@ public class DiningCourtPagerAdapter extends FragmentPagerAdapter implements Ada
 
     @Override
     public int getCount() {
-        // Show 5 total pages.
         return mDiningCourts.size();
     }
 
@@ -55,21 +47,4 @@ public class DiningCourtPagerAdapter extends FragmentPagerAdapter implements Ada
         return mDiningCourts.get(position);
     }
 
-
-
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Timber.d("Meal was selected " + position);
-        mMealString = (String) parent.getAdapter().getItem(position);
-        for(DayMenuFragment frag : mFragments) {
-            frag.setMeal(mMealString);
-        }
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        Timber.d("OnNothingSelected()");
-    }
 }

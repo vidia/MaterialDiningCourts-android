@@ -1,47 +1,39 @@
 package com.davidtschida.materialdiningcourts.activities;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.davidtschida.materialdiningcourts.R;
-import com.davidtschida.materialdiningcourts.adapters.DiningCourtPagerAdapter;
 import com.davidtschida.materialdiningcourts.fragments.DatePickerFragment;
+import com.davidtschida.materialdiningcourts.fragments.DiningCourtPagerFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class MealViewActivity
-        extends AppCompatActivity
+        extends AppCompatActivity implements AdapterView.OnItemSelectedListener
         //implements DatePickerDialog.OnDateSetListener
 {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private DiningCourtPagerAdapter mSectionsPagerAdapter;
+
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    @Bind(R.id.container) protected ViewPager mViewPager;
-    @Bind(R.id.tabs) protected TabLayout tabLayout;
     @Bind(R.id.meal_chooser_spinner) protected Spinner mMealSpinner;
     @Bind(R.id.toolbar) protected Toolbar toolbar;
+    @Bind(R.id.empty) protected ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +44,7 @@ public class MealViewActivity
         setupToolbar();
 
         Timber.d("onCreate()");
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new DiningCourtPagerAdapter(getSupportFragmentManager());
-        // Set up the ViewPager with the sections adapter.
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        tabLayout.setupWithViewPager(mViewPager);
+        mProgressBar.setIndeterminate(true);
 
         //mMealSpinner.setAdapter(new MealsSpinnerAdapter());
 
@@ -71,13 +55,14 @@ public class MealViewActivity
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         mMealSpinner.setAdapter(adapter);
-        mMealSpinner.setOnItemSelectedListener(mSectionsPagerAdapter);
+
+
+        mMealSpinner.setOnItemSelectedListener(this);
     }
 
     private void setupToolbar() {
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Menus"); //We just set it above this. Ignore warning
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
     }
@@ -105,5 +90,17 @@ public class MealViewActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        mProgressBar.setVisibility(View.GONE);
+        DiningCourtPagerFragment frag = DiningCourtPagerFragment.newInstance((String)parent.getItemAtPosition(position));
+        getSupportFragmentManager().beginTransaction().add(R.id.container, frag, "DiningCourtPagerAdapter").commit();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

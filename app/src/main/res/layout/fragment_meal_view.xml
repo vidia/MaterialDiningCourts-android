@@ -1,9 +1,10 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/white"
-    tools:context=".fragments.PlaceholderFragment">
+    android:orientation="vertical"
+    tools:context=".fragments.DayMenuFragment">
 
     <TextView
         android:id="@+id/hours_display"
@@ -11,24 +12,22 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:background="#e5e5e5"
-        tools:text="Open until 8:00pm"/>
+        tools:text="Open until 8:00pm" />
 
     <TextView
         android:id="@+id/entreeHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:layout_below="@+id/hours_display"
         android:textColor="@android:color/holo_green_dark"
         android:textStyle="bold"
         android:textAppearance="@android:style/TextAppearance.Material.Small"
-        android:text="Foods"/>
+        android:text="Foods" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/entreesList"
-        android:layout_below="@+id/entreeHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/food_list_item"/>
+        tools:listitem="@layout/food_list_item" />
 
-</RelativeLayout>
+</LinearLayout>

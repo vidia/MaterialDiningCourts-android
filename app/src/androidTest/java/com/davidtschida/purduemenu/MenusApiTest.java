@@ -1,16 +1,10 @@
 package com.davidtschida.purduemenu;
 
-import android.os.AsyncTask;
-import android.test.AndroidTestCase;
 import android.test.InstrumentationTestCase;
-import android.util.Log;
 
 import com.davidtschida.purduemenu.models.DiningLocation;
 import com.davidtschida.purduemenu.models.Locations;
 
-import junit.framework.TestCase;
-
-import java.lang.reflect.Field;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 

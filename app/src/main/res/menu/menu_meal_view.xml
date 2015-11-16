@@ -9,11 +9,12 @@
         app:showAsAction="never" />
 
 
-    <item android:id="@+id/action_pick_date"
+    <item
+        android:id="@+id/action_pick_date"
         android:icon="@android:drawable/ic_menu_my_calendar"
         android:title="Pick a date"
         android:showAsAction="always"
         android:orderInCategory="1"
-        android:menuCategory="secondary"/>
+        android:menuCategory="secondary" />
 
 </menu>
