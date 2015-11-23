@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -77,7 +79,6 @@ public class MealViewActivity
     private void setupToolbar() {
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Menus"); //We just set it above this. Ignore warning
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
     }
@@ -105,5 +106,15 @@ public class MealViewActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        //Send event to refresh fragments. 
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
