@@ -96,7 +96,7 @@ public class MealViewActivity
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         mProgressBar.setVisibility(View.GONE);
         DiningCourtPagerFragment frag = DiningCourtPagerFragment.newInstance((String)parent.getItemAtPosition(position));
-        getSupportFragmentManager().beginTransaction().add(R.id.container, frag, "DiningCourtPagerAdapter").commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, frag, "DiningCourtPagerAdapter").commit();
     }
 
     @Override
