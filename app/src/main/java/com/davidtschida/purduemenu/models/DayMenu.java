@@ -2,7 +2,6 @@ package com.davidtschida.purduemenu.models;
 
 import android.util.Log;
 
-import com.davidtschida.purduemenu.exceptions.MealDoesNotExistException;
 import com.google.gson.annotations.SerializedName;
 
 import org.joda.time.LocalTime;
@@ -36,7 +35,8 @@ public class DayMenu {
                 return meal;
             }
         }
-        throw new MealDoesNotExistException("The meal, " + mealName + ", does not exist for this day or is not a valid meal.");
+        return null;
+        //throw new MealDoesNotExistException("The meal, " + mealName + ", does not exist for this day or is not a valid meal.");
     }
 
     /**
