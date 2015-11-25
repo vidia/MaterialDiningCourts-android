@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class MealViewActivity
-        extends AppCompatActivity
+        extends AppCompatActivity implements AdapterView.OnItemSelectedListener
         //implements DatePickerDialog.OnDateSetListener
 {
 
@@ -73,7 +73,7 @@ public class MealViewActivity
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         mMealSpinner.setAdapter(adapter);
-        mMealSpinner.setOnItemSelectedListener(mSectionsPagerAdapter);
+        mMealSpinner.setOnItemSelectedListener(this);
     }
 
     private void setupToolbar() {
