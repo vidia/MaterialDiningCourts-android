@@ -38,7 +38,7 @@ public class Meal {
 
     public List<FoodItem> getAllFoodItems() {
         List<FoodItem> foodItems = new ArrayList<>();
-        for(Station station : getStations()) {
+        for (Station station : getStations()) {
             foodItems.addAll(station.getItems());
         }
         return foodItems;
@@ -46,8 +46,9 @@ public class Meal {
 
     /**
      * Returns true if the given time is within the operating hours for the meal
-     *
+     * <p/>
      * Assumptions: The date is not checked, only the time.
+     *
      * @param localTime the time to be checked against.
      * @return true|false
      */
@@ -59,8 +60,9 @@ public class Meal {
 
     /**
      * Returns true if the given time is after the end of the meal
-     *
+     * <p/>
      * Assumptions: The date is not checked, only the time.
+     *
      * @param localTime the time to be checked against.
      * @return true|false
      */
@@ -75,7 +77,7 @@ public class Meal {
     }
 
     public long timeUntilStartFrom(LocalTime localTime) {
-        if(getHours() == null)
+        if (getHours() == null)
             return Long.MAX_VALUE; //Return "infinity" for time until if there are no hours.
         //TODO: Should this be negative?
         return getHours().getStartLocalTime().getMillisOfDay() - localTime.getMillisOfDay();

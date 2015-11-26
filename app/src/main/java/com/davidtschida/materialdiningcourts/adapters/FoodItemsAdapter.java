@@ -24,20 +24,6 @@ public class FoodItemsAdapter extends RecyclerView.Adapter<FoodItemsAdapter.View
         this.mFoodsList = foods;
     }
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView mTextView;
-        public View mRootView;
-        public ViewHolder(View parent) {
-            super(parent);
-            mTextView = (TextView)parent.findViewById(R.id.simpleItemTextView);
-            mRootView = parent;
-        }
-    }
-
     // Create new views (invoked by the layout manager)
     @Override
     public FoodItemsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
@@ -64,5 +50,20 @@ public class FoodItemsAdapter extends RecyclerView.Adapter<FoodItemsAdapter.View
     @Override
     public int getItemCount() {
         return mFoodsList.size();
+    }
+
+    // Provide a reference to the views for each data item
+    // Complex data items may need more than one view per item, and
+    // you provide access to all the views for a data item in a view holder
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        // each data item is just a string in this case
+        public TextView mTextView;
+        public View mRootView;
+
+        public ViewHolder(View parent) {
+            super(parent);
+            mTextView = (TextView) parent.findViewById(R.id.simpleItemTextView);
+            mRootView = parent;
+        }
     }
 }
