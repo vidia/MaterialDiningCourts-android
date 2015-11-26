@@ -34,7 +34,7 @@ public class DiningCourtPagerAdapter extends FragmentPagerAdapter implements Ada
 
         LocalDate today = LocalDate.now();
 
-        for(String court : mDiningCourts) {
+        for (String court : mDiningCourts) {
             mFragments.add(DayMenuFragment.newInstance(court, today));
         }
     }
@@ -56,13 +56,11 @@ public class DiningCourtPagerAdapter extends FragmentPagerAdapter implements Ada
     }
 
 
-
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Timber.d("Meal was selected " + position);
         mMealString = (String) parent.getAdapter().getItem(position);
-        for(DayMenuFragment frag : mFragments) {
+        for (DayMenuFragment frag : mFragments) {
             frag.setMeal(mMealString);
         }
         notifyDataSetChanged();

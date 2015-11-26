@@ -52,6 +52,9 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
     private String mHoursDisplayText;
     private String mMealString;
 
+    public DayMenuFragment() {
+    }
+
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -60,7 +63,7 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
         DayMenuFragment fragment = new DayMenuFragment();
         Bundle args = new Bundle();
         args.putString(ARG_DININGCOURT_NAME, diningCourt);
-        if(meal != null)
+        if (meal != null)
             args.putString(ARG_MEAL_NAME, meal);
         args.putSerializable(ARG_DATE, LocalDate);
         fragment.setArguments(args);
@@ -69,15 +72,13 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
 
     /**
      * Returns a new instance of the fragment that will use the current time to choose which meal is being displayed.
+     *
      * @param diningCourt the dining court to pull info for
-     * @param LocalDate the date
+     * @param LocalDate   the date
      * @return a new fragment instance with args assigned.
      */
     public static DayMenuFragment newInstance(String diningCourt, LocalDate LocalDate) {
         return newInstance(diningCourt, null, LocalDate);
-    }
-
-    public DayMenuFragment() {
     }
 
     @Override
@@ -98,13 +99,13 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
         super.onStart();
         Log.d(TAG, "Fragment " + mDiningCourt + " onStart()");
 
-        if(!haveQueriedApi)
+        if (!haveQueriedApi)
             populateDataFromApi();
 
     }
 
     private void populateDataFromApi() {
-        if(mMeal == null) {
+        if (mMeal == null) {
             Timber.i("Requesting getDiningMenu(" + mDiningCourt + ", " + mLocalDate.toString("MM-dd-yyyy") + ")");
             MenusApi.getApiService().getDiningMenu(mDiningCourt, mLocalDate.toString("MM-dd-yyyy"))
                     .enqueue(this);
@@ -112,7 +113,7 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
     }
 
     private void setAdapterForFoodItems() {
-        if(mFoodItemsAdapter == null && mFoodItems != null && mFoodItems.size() > 0) {
+        if (mFoodItemsAdapter == null && mFoodItems != null && mFoodItems.size() > 0) {
             mFoodItemsAdapter = new FoodItemsAdapter(mFoodItems);
         }
         mEntreeItemsRecycleView.setAdapter(mFoodItemsAdapter);
@@ -123,14 +124,14 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
         super.onResume();
         Log.d(TAG, "Fragment " + mDiningCourt + " onResume()");
 
-        if(haveQueriedApi) {
+        if (haveQueriedApi) {
             setAdapterForFoodItems();
             refreshDisplayText();
         }
     }
 
     private void refreshDisplayText() {
-        if(getView() != null) {
+        if (getView() != null) {
             TextView hoursDisplay = (TextView) getView().findViewById(R.id.hours_display);
             hoursDisplay.setText(mHoursDisplayText);
         }
@@ -153,19 +154,19 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
         Log.d(TAG, "Got a response for the menu");
         haveQueriedApi = true;
 
-        if(mMealName == null) {
+        if (mMealName == null) {
             Log.d(TAG + mDiningCourt, "No meal was given, getting meal from time");
             mMeal = response.body().getMealForTime(LocalTime.now());
             Log.d(TAG + mDiningCourt, "Received meal " + ((mMeal == null) ? "NULL" : mMeal.getName()));
 
-            if(mMeal == null) {
+            if (mMeal == null) {
 
 
                 //This will loops infinitely without a day context attached to meals.
                 /*LocalDate nextDay = mLocalDate.plusDays(1);
                 MenusApi.getApiService().getDiningMenu(mDiningCourt, mLocalDate.toString("MM-dd-yyyy"))
                         .enqueue(this);*/
-                if(getView() != null) {
+                if (getView() != null) {
                     setHoursDisplayText(mDiningCourt + " has no more meals today");
                 }
                 return;
@@ -174,8 +175,8 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
             Log.d(TAG + mDiningCourt, "Using given meal");
             mMeal = response.body().getMealByName(mMealName);
         }
-        if(getView() != null) {
-            if(mMeal.startsAfter(LocalTime.now())) {
+        if (getView() != null) {
+            if (mMeal.startsAfter(LocalTime.now())) {
                 setHoursDisplayText(mMeal.getName() + " opens at " + mMeal.getHours().getStartLocalTime().toString("HH:mm"));
             } else if (mMeal.containsTime(LocalTime.now())) {
                 setHoursDisplayText(mMeal.getName() + " ends at " + mMeal.getHours().getStartLocalTime().toString("HH:mm"));
@@ -203,7 +204,7 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
         mFoodItems = null;
         mHoursDisplayText = null;
 
-        if(haveQueriedApi) {
+        if (haveQueriedApi) {
             populateDataFromApi();
         }
     }

@@ -31,8 +31,8 @@ public class DayMenu {
     List<Meal> meals;
 
     public Meal getMealByName(String mealName) {
-        for(Meal meal : getMeals()) {
-            if(meal.getName().equalsIgnoreCase(mealName)) {
+        for (Meal meal : getMeals()) {
+            if (meal.getName().equalsIgnoreCase(mealName)) {
                 return meal;
             }
         }
@@ -41,7 +41,7 @@ public class DayMenu {
 
     /**
      * Returns the meal that is either in progress or is next at this location, relative to the given time.
-     *
+     * <p/>
      * NOTE: If the given time is after all meals for this day, NULL is returned.
      *
      * @param localTime the time to
@@ -51,7 +51,7 @@ public class DayMenu {
         Meal nextOrCurrentMeal = null;
 
         Log.d(TAG, "getMealForTime(" + localTime.toString() + "); Location: " + location + "; Date: " + date);
-        for(Meal meal : getMeals()) {
+        for (Meal meal : getMeals()) {
             Log.d(TAG, "Checking meal " + meal.getName());
             if (meal.containsTime(localTime)) {
                 Log.d(TAG, "Meal contains the time, returning.");

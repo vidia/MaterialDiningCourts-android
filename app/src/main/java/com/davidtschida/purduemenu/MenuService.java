@@ -3,11 +3,8 @@ package com.davidtschida.purduemenu;
 import com.davidtschida.purduemenu.models.DayMenu;
 import com.davidtschida.purduemenu.models.FoodItem;
 import com.davidtschida.purduemenu.models.FoodItemSchedule;
-import com.davidtschida.purduemenu.models.DiningLocation;
 import com.davidtschida.purduemenu.models.Locations;
 import com.davidtschida.purduemenu.models.SearchResults;
-
-import java.util.List;
 
 import retrofit.Call;
 import retrofit.http.GET;

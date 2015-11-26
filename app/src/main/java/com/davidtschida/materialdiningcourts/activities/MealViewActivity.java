@@ -28,6 +28,17 @@ public class MealViewActivity
 {
 
     /**
+     * The {@link ViewPager} that will host the section contents.
+     */
+    @Bind(R.id.container)
+    protected ViewPager mViewPager;
+    @Bind(R.id.tabs)
+    protected TabLayout tabLayout;
+    @Bind(R.id.meal_chooser_spinner)
+    protected Spinner mMealSpinner;
+    @Bind(R.id.toolbar)
+    protected Toolbar toolbar;
+    /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
      * {@link FragmentPagerAdapter} derivative, which will keep every
@@ -36,14 +47,6 @@ public class MealViewActivity
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private DiningCourtPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    @Bind(R.id.container) protected ViewPager mViewPager;
-    @Bind(R.id.tabs) protected TabLayout tabLayout;
-    @Bind(R.id.meal_chooser_spinner) protected Spinner mMealSpinner;
-    @Bind(R.id.toolbar) protected Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +81,7 @@ public class MealViewActivity
 
     private void setupToolbar() {
         setSupportActionBar(toolbar);
-        if(getSupportActionBar() != null) {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
     }
