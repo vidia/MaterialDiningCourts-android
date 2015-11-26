@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.davidtschida.materialdiningcourts.R;
@@ -58,11 +57,10 @@ public class MealViewActivity
         setupToolbar();
 
         Timber.d("onCreate()");
-        mProgressBar.setIndeterminate(true);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new DiningCourtPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter = new DiningCourtPagerAdapter(getSupportFragmentManager(), "Dinner");
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
