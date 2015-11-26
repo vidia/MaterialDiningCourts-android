@@ -5,7 +5,11 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
-import android.widget.Toast;
+
+import com.davidtschida.materialdiningcourts.eventbus.DateChosenEvent;
+import com.davidtschida.materialdiningcourts.eventbus.EventBus;
+
+import org.joda.time.LocalDate;
 
 import java.util.Calendar;
 
@@ -24,8 +28,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        // Do something with the date chosen by the user
-
-        Toast.makeText(getActivity(), "This isn't implemented yet.", Toast.LENGTH_LONG).show();
+        EventBus.getBus().post(new DateChosenEvent(new LocalDate(String.format("%d-%d-%d", year, month+1, day))));
     }
 }

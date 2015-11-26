@@ -16,7 +16,14 @@ import android.widget.Spinner;
 
 import com.davidtschida.materialdiningcourts.R;
 import com.davidtschida.materialdiningcourts.adapters.DiningCourtPagerAdapter;
+import com.davidtschida.materialdiningcourts.eventbus.DateChosenEvent;
+import com.davidtschida.materialdiningcourts.eventbus.EventBus;
+import com.davidtschida.materialdiningcourts.eventbus.MealChosenEvent;
 import com.davidtschida.materialdiningcourts.fragments.DatePickerFragment;
+import com.squareup.otto.Produce;
+import com.squareup.otto.Subscribe;
+
+import org.joda.time.LocalDate;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -48,6 +55,9 @@ public class MealViewActivity
      */
     private DiningCourtPagerAdapter mSectionsPagerAdapter;
 
+    private DateChosenEvent mLastDateEvent;
+    private MealChosenEvent mLastMealEvent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +70,7 @@ public class MealViewActivity
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new DiningCourtPagerAdapter(getSupportFragmentManager(), "Dinner");
+        mSectionsPagerAdapter = new DiningCourtPagerAdapter(getSupportFragmentManager());
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -77,6 +87,34 @@ public class MealViewActivity
         // Apply the adapter to the spinner
         mMealSpinner.setAdapter(adapter);
         mMealSpinner.setOnItemSelectedListener(this);
+
+        EventBus.getBus().register(this);
+    }
+
+    @Subscribe @SuppressWarnings("unused")
+    public void dateChosen(DateChosenEvent event) {
+        Timber.i("Got the date chosen event %s", event);
+        mLastDateEvent = event;
+    }
+
+    @Subscribe @SuppressWarnings("unused")
+    public void mealChosen(MealChosenEvent event) {
+        Timber.i("Got the meal chosen event %s", event);
+        mLastMealEvent = event;
+    }
+
+    @Produce @SuppressWarnings("unused") public DateChosenEvent produceChosenDate() {
+        if(mLastDateEvent == null) {
+            mLastDateEvent = new DateChosenEvent(LocalDate.now());
+        }
+        return mLastDateEvent;
+    }
+
+    @Produce @SuppressWarnings("unused") public MealChosenEvent produceChosenMeal() {
+        if(mLastMealEvent == null) {
+            mLastMealEvent = new MealChosenEvent((String)mMealSpinner.getSelectedItem());
+        }
+        return mLastMealEvent;
     }
 
     private void setupToolbar() {
@@ -113,7 +151,8 @@ public class MealViewActivity
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //Send event to refresh fragments. 
+        //Send event to refresh fragments.
+        EventBus.getBus().post(new MealChosenEvent((String) parent.getItemAtPosition(position)));
     }
 
     @Override
