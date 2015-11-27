@@ -6,8 +6,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.davidtschida.materialdiningcourts.fragments.DayMenuFragment;
 
-import org.joda.time.LocalDate;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,14 +19,12 @@ public class DiningCourtPagerAdapter extends FragmentPagerAdapter {
     private ArrayList<String> mDiningCourts = new ArrayList<>();
     private List<DayMenuFragment> mFragments = new ArrayList<DayMenuFragment>();
 
-    public DiningCourtPagerAdapter(FragmentManager fm, String mMeal) {
+    public DiningCourtPagerAdapter(FragmentManager fm) {
         super(fm);
         mDiningCourts.addAll(Arrays.asList("Wiley", "Windsor", "Ford", "Hillenbrand", "Earhart"));
 
-        LocalDate today = LocalDate.now();
-
         for (String court : mDiningCourts) {
-            mFragments.add(DayMenuFragment.newInstance(court, mMeal, today));
+            mFragments.add(DayMenuFragment.newInstance(court));
         }
     }
 
