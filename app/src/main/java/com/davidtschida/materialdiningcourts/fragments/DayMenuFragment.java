@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.davidtschida.materialdiningcourts.R;
@@ -26,6 +27,8 @@ import org.joda.time.LocalTime;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
@@ -44,11 +47,20 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
     private static final String ARG_MEAL_NAME = "ARG_MEAL_NAME";
     private static final String ARG_DATE = "ARG_DATE";
 
-    private RecyclerView mEntreeItemsRecycleView;
+    @Bind(R.id.entreesList)
+    protected RecyclerView mEntreeItemsRecycleView;
+    @Bind(R.id.entreeHeader)
+    protected TextView mEntreeHeader;
+    @Bind(R.id.hours_display)
+    protected TextView mHoursDisplay;
+    @Bind(R.id.progressBar)
+    protected ProgressBar mProgressBar;
+    @Bind(R.id.progressTitle)
+    protected TextView mProgressText;
+
     private String mDiningCourt;
     private LocalDate mLocalDate;
 
-    private boolean haveQueriedApi = false;
     private Meal mMeal;
     private List<FoodItem> mFoodItems;
     private FoodItemsAdapter mFoodItemsAdapter;
@@ -97,7 +109,7 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
     @Override
     public void onStart() {
         super.onStart();
-        Timber.d("Fragment " + mDiningCourt + " onStart()");
+        Timber.d("Fragment %s onStart()", mDiningCourt);
         EventBus.getBus().register(this);
     }
 
@@ -126,6 +138,13 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
     }
 
     private void populateDataFromApi() {
+        Timber.i("Setting in progress view");
+        mHoursDisplay.setVisibility(View.INVISIBLE);
+        mEntreeItemsRecycleView.setVisibility(View.INVISIBLE);
+        mEntreeHeader.setVisibility(View.INVISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressText.setVisibility(View.VISIBLE);
+
         Timber.i("Requesting getDiningMenu(%s, %s)", mDiningCourt, mLocalDate.toString("MM-dd-yyyy"));
         MenusApi.getApiService().getDiningMenu(mDiningCourt, mLocalDate.toString("MM-dd-yyyy"))
                 .enqueue(this);
@@ -138,21 +157,9 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
         mEntreeItemsRecycleView.setAdapter(mFoodItemsAdapter);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "Fragment " + mDiningCourt + " onResume()");
-
-        //if (haveQueriedApi) {
-        //    setAdapterForFoodItems();
-        //    refreshDisplayText();
-        //}
-    }
-
     private void refreshDisplayText() {
         if (getView() != null) {
-            TextView hoursDisplay = (TextView) getView().findViewById(R.id.hours_display);
-            hoursDisplay.setText(mHoursDisplayText);
+            mHoursDisplay.setText(mHoursDisplayText);
         }
     }
 
@@ -161,8 +168,9 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
                              Bundle savedInstanceState) {
         Log.d(TAG, "Fragment " + mDiningCourt + " onCreateView()");
         View rootView = inflater.inflate(R.layout.fragment_meal_view, container, false);
+        ButterKnife.bind(this, rootView);
 
-        mEntreeItemsRecycleView = (RecyclerView) rootView.findViewById(R.id.entreesList);
+        //mEntreeItemsRecycleView = (RecyclerView) rootView.findViewById(R.id.entreesList);
         mEntreeItemsRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         //mEntreeItemsRecycleView.setNestedScrollingEnabled(false);
@@ -171,12 +179,32 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
         return rootView;
     }
 
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
     @Override
     public void onResponse(Response<DayMenu> response, Retrofit retrofit) {
         Log.d(TAG, "Got a response for the menu");
 
         Log.d(TAG + mDiningCourt, "Using given meal");
         mMeal = response.body().getMealByName(mMealString);
+
+        if(mMeal.getStatus().equalsIgnoreCase("Closed")) {
+            Timber.i("The selected meal is currently closed.");
+            setHoursDisplayText("Closed for " + mMealString);
+            mHoursDisplay.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.INVISIBLE);
+            mProgressText.setVisibility(View.INVISIBLE);
+            return;
+        }
+
+        mHoursDisplay.setVisibility(View.VISIBLE);
+        mEntreeItemsRecycleView.setVisibility(View.VISIBLE);
+        mEntreeHeader.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.INVISIBLE);
+        mProgressText.setVisibility(View.INVISIBLE);
 
         if (getView() != null) {
             if (mMeal.startsAfter(LocalTime.now())) {

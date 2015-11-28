@@ -1,9 +1,8 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:orientation="vertical"
     tools:context=".fragments.DayMenuFragment">
 
     <TextView
@@ -21,6 +20,7 @@
         android:padding="10dp"
         android:textColor="@android:color/holo_green_dark"
         android:textStyle="bold"
+        android:layout_below="@+id/hours_display"
         android:textAppearance="@android:style/TextAppearance.Material.Small"
         android:text="Foods" />
 
@@ -28,6 +28,23 @@
         android:id="@+id/entreesList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/entreeHeader"
         tools:listitem="@layout/food_list_item" />
 
-</LinearLayout>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_centerInParent="true" />
+    <TextView
+        android:id="@+id/progressTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Loading Food..."
+        android:layout_below="@+id/progressBar"
+        android:textAppearance="@android:style/TextAppearance.Material.Small"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

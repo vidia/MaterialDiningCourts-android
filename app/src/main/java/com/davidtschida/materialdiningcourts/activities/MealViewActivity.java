@@ -139,7 +139,6 @@ public class MealViewActivity
         if (id == R.id.action_pick_date) {
             DialogFragment newFragment = new DatePickerFragment();
             newFragment.show(getSupportFragmentManager(), "datePicker");
-
             return true;
         }
 
