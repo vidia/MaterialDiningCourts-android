@@ -21,7 +21,7 @@ public class DiningCourtPagerAdapter extends FragmentPagerAdapter {
 
     public DiningCourtPagerAdapter(FragmentManager fm) {
         super(fm);
-        mDiningCourts.addAll(Arrays.asList("Wiley", "Windsor", "Ford", "Hillenbrand", "Earhart"));
+        mDiningCourts.addAll(Arrays.asList("Earhart", "Ford", "Hillenbrand", "Wiley", "Windsor"));
 
         for (String court : mDiningCourts) {
             mFragments.add(DayMenuFragment.newInstance(court));

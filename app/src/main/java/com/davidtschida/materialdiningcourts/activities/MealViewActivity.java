@@ -63,10 +63,9 @@ public class MealViewActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_view);
         ButterKnife.bind(this);
+        EventBus.getBus().register(this);
 
         setupToolbar();
-
-        Timber.d("onCreate()");
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -87,8 +86,6 @@ public class MealViewActivity
         // Apply the adapter to the spinner
         mMealSpinner.setAdapter(adapter);
         mMealSpinner.setOnItemSelectedListener(this);
-
-        EventBus.getBus().register(this);
     }
 
     @Subscribe @SuppressWarnings("unused")
