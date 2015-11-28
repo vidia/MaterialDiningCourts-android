@@ -191,7 +191,7 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
         Log.d(TAG + mDiningCourt, "Using given meal");
         mMeal = response.body().getMealByName(mMealString);
 
-        if(mMeal.getStatus().equalsIgnoreCase("Closed")) {
+        if("Closed".equalsIgnoreCase(mMeal.getStatus())) {
             Timber.i("The selected meal is currently closed.");
             setHoursDisplayText("Closed for " + mMealString);
             mHoursDisplay.setVisibility(View.VISIBLE);
