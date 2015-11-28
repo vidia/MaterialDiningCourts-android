@@ -6,6 +6,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- Required from http://stackoverflow.com/a/29014475/2193387 -->
+        <item name="android:datePickerDialogTheme">@style/dateDialogTheme</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -32,6 +36,14 @@
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/tabUnselectedTextColor</item>
         <item name="textAllCaps">true</item>
+    </style>
+
+    <!-- TODO: Change to use AppCompat rather than Material -->
+    <style name="dateDialogTheme" parent="android:Theme.Material.Light.Dialog">
+        <!-- Required from http://stackoverflow.com/a/29014475/2193387 -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
 </resources>
