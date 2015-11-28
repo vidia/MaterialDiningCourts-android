@@ -22,6 +22,7 @@
         android:layout_width="24dp"
         android:layout_alignParentEnd="true"
         android:text="{fa-heart}"
+        android:gravity="center"
         android:layout_centerVertical="true"
         android:textSize="20sp"
         android:textColor="@color/favoriteNotSelected" />

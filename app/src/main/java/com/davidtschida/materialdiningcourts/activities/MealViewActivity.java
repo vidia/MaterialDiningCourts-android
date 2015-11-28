@@ -122,6 +122,12 @@ public class MealViewActivity
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getBus().unregister(this);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_meal_view, menu);
