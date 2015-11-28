@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 
+import com.davidtschida.materialdiningcourts.R;
 import com.davidtschida.materialdiningcourts.eventbus.DateChosenEvent;
 import com.davidtschida.materialdiningcourts.eventbus.EventBus;
 
@@ -24,7 +25,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         // Create a new instance of DatePickerDialog and return it
-        return new DatePickerDialog(getActivity(), this, year, month, day);
+        return new DatePickerDialog(getActivity(), R.style.dateDialogTheme ,this, year, month, day);
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {

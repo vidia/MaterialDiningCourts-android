@@ -20,6 +20,8 @@ import com.davidtschida.materialdiningcourts.eventbus.DateChosenEvent;
 import com.davidtschida.materialdiningcourts.eventbus.EventBus;
 import com.davidtschida.materialdiningcourts.eventbus.MealChosenEvent;
 import com.davidtschida.materialdiningcourts.fragments.DatePickerFragment;
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 
@@ -76,13 +78,11 @@ public class MealViewActivity
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(mViewPager);
 
-        //mMealSpinner.setAdapter(new MealsSpinnerAdapter());
-
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.meals_array, android.R.layout.simple_spinner_item);
+                R.array.meals_array, R.layout.meals_spinner_item);
         // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.meals_spinner_dropdown_item);
         // Apply the adapter to the spinner
         mMealSpinner.setAdapter(adapter);
         mMealSpinner.setOnItemSelectedListener(this);
@@ -125,6 +125,12 @@ public class MealViewActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_meal_view, menu);
+
+        // Set an icon in the ActionBar
+        menu.findItem(R.id.action_pick_date).setIcon(
+                new IconDrawable(this, FontAwesomeIcons.fa_calendar)
+                        .colorRes(R.color.white)
+                        .actionBarSize());
         return true;
     }
 
