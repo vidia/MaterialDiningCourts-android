@@ -1,10 +1,13 @@
 package com.davidtschida.materialdiningcourts.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -22,6 +25,7 @@ import com.davidtschida.materialdiningcourts.eventbus.MealChosenEvent;
 import com.davidtschida.materialdiningcourts.fragments.DatePickerFragment;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.joanzapata.iconify.fonts.MaterialIcons;
 import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 
@@ -47,6 +51,11 @@ public class MealViewActivity
     protected Spinner mMealSpinner;
     @Bind(R.id.toolbar)
     protected Toolbar toolbar;
+    @Bind(R.id.drawer_layout)
+    protected DrawerLayout mDrawerLayout;
+    @Bind(R.id.nav_view)
+    protected NavigationView mNavigationView;
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -63,11 +72,12 @@ public class MealViewActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meal_view);
+        setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        EventBus.getBus().register(this);
-
         setupToolbar();
+        setupDrawerContent();
+        //Must be done AFTER initing the spinner. Relies on spinner having a value.
+        EventBus.getBus().register(this);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -77,15 +87,6 @@ public class MealViewActivity
 
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(mViewPager);
-
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.meals_array, R.layout.meals_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(R.layout.meals_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        mMealSpinner.setAdapter(adapter);
-        mMealSpinner.setOnItemSelectedListener(this);
     }
 
     @Subscribe @SuppressWarnings("unused")
@@ -114,11 +115,40 @@ public class MealViewActivity
         return mLastMealEvent;
     }
 
+    private void setupDrawerContent() {
+        mNavigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        menuItem.setChecked(true);
+                        mDrawerLayout.closeDrawers();
+                        return true;
+                    }
+                });
+    }
+
     private void setupToolbar() {
+        //Set up the spinner in the toolbar with meals data.
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.meals_array, R.layout.meals_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(R.layout.meals_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        mMealSpinner.setAdapter(adapter);
+        mMealSpinner.setOnItemSelectedListener(this);
+
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setHomeAsUpIndicator(new IconDrawable(this, MaterialIcons.md_menu)
+                    .colorRes(R.color.white)
+                    .actionBarSize());
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+
     }
 
     @Override
@@ -145,13 +175,14 @@ public class MealViewActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_pick_date) {
-            DialogFragment newFragment = new DatePickerFragment();
-            newFragment.show(getSupportFragmentManager(), "datePicker");
-            return true;
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.action_pick_date:
+                DialogFragment newFragment = new DatePickerFragment();
+                newFragment.show(getSupportFragmentManager(), "datePicker");
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
+import com.joanzapata.iconify.fonts.MaterialModule;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -16,7 +17,8 @@ public class DiningCourtApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Iconify.with(new FontAwesomeModule());
+        Iconify.with(new FontAwesomeModule())
+                .with(new MaterialModule());
         JodaTimeAndroid.init(this);
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
