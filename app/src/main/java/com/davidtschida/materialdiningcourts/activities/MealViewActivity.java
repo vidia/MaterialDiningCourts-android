@@ -122,7 +122,26 @@ public class MealViewActivity
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
-                        return true;
+                        switch(menuItem.getItemId()) {
+                            case R.id.nav_pick_date:
+                                DialogFragment newFragment = new DatePickerFragment();
+                                newFragment.show(getSupportFragmentManager(), "datePicker");
+                                return true;
+                            case R.id.nav_breakfast:
+                                EventBus.getBus().post(new MealChosenEvent("Breakfast"));
+                                return true;
+                            case R.id.nav_lunch:
+                                EventBus.getBus().post(new MealChosenEvent("Lunch"));
+                                return true;
+                            case R.id.nav_late_lunch:
+                                EventBus.getBus().post(new MealChosenEvent("Late Lunch"));
+                                return true;
+                            case R.id.nav_dinner:
+                                EventBus.getBus().post(new MealChosenEvent("Dinner"));
+                                return true;
+                        }
+
+                        return false;
                     }
                 });
     }
@@ -147,7 +166,6 @@ public class MealViewActivity
                     .actionBarSize());
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
 
     }
 

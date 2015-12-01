@@ -188,8 +188,22 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
     public void onResponse(Response<DayMenu> response, Retrofit retrofit) {
         Log.d(TAG, "Got a response for the menu");
 
+        if(getView() == null) {
+            Timber.i("The view was destroyed before data could be displayed. Aborting.");
+            return;
+        }
+
         Log.d(TAG + mDiningCourt, "Using given meal");
         mMeal = response.body().getMealByName(mMealString);
+
+        if(mMeal == null) {
+            Timber.i("That meal isn't available at the current dining court.");
+            setHoursDisplayText(mMealString + " isn't being served here");
+            mHoursDisplay.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.INVISIBLE);
+            mProgressText.setVisibility(View.INVISIBLE);
+            return;
+        }
 
         if("Closed".equalsIgnoreCase(mMeal.getStatus())) {
             Timber.i("The selected meal is currently closed.");
@@ -206,12 +220,12 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
         mProgressBar.setVisibility(View.INVISIBLE);
         mProgressText.setVisibility(View.INVISIBLE);
 
-        if (getView() != null) {
-            if (mMeal.startsAfter(LocalTime.now())) {
-                setHoursDisplayText(mMeal.getName() + " opens at " + mMeal.getHours().getStartLocalTime().toString("HH:mm"));
-            } else if (mMeal.containsTime(LocalTime.now())) {
-                setHoursDisplayText(mMeal.getName() + " ends at " + mMeal.getHours().getStartLocalTime().toString("HH:mm"));
-            }
+        if (mMeal.startsAfter(LocalTime.now())) {
+            setHoursDisplayText(mMeal.getName() + " opens at " + mMeal.getHours().getStartLocalTime().toString("HH:mm"));
+        } else if (mMeal.containsTime(LocalTime.now())) {
+            setHoursDisplayText(mMeal.getName() + " ends at " + mMeal.getHours().getStartLocalTime().toString("HH:mm"));
+        } else if(mMeal.endsBefore(LocalTime.now())) {
+            setHoursDisplayText(mMeal.getName() + " ended at " + mMeal.getHours().getEndLocalTime().toString("HH:mm"));
         }
 
         mFoodItems = mMeal.getAllFoodItems();

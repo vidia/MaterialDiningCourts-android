@@ -3,25 +3,29 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
-            android:title="Home" />
+            android:id="@+id/nav_breakfast"
+            android:title="Breakfast" />
         <item
-            android:id="@+id/nav_messages"
-            android:title="Messages" />
+            android:id="@+id/nav_lunch"
+            android:title="Lunch" />
         <item
-            android:id="@+id/nav_friends"
-            android:title="Friends" />
+            android:id="@+id/nav_late_lunch"
+            android:title="Late lunch" />
         <item
-            android:id="@+id/nav_discussion"
-            android:title="Discussion" />
+            android:id="@+id/nav_dinner"
+            android:title="Dinner" />
     </group>
 
-    <item android:title="Sub items">
+    <item
+        android:id="@+id/nav_pick_date"
+        android:title="Pick date"/>
+
+    <item android:title="Other">
         <menu>
             <item
-                android:title="Sub item 1" />
+                android:title="Next meal" />
             <item
-                android:title="Sub item 2" />
+                android:title="Favorites" />
         </menu>
     </item>
 
