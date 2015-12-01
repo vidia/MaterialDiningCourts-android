@@ -117,3 +117,6 @@ gradle-app.setting
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
+
+# Resource file for storing client keys and secrets.
+secret.xml
