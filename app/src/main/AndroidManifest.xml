@@ -3,6 +3,8 @@
     package="com.davidtschida.materialdiningcourts">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Added for Parse -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"

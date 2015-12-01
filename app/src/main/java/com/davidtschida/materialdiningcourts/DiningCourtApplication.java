@@ -5,6 +5,8 @@ import android.app.Application;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.joanzapata.iconify.fonts.MaterialModule;
+import com.parse.Parse;
+import com.parse.ParseUser;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -23,5 +25,11 @@ public class DiningCourtApplication extends Application {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
+        // Parse //
+        // Enable Local Datastore.
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this, getString(R.string.parseApplicationId), getString(R.string.parseClientKey));
+
+        ParseUser.enableAutomaticUser();
     }
 }
