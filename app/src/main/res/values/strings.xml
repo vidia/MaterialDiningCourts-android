@@ -1,15 +1,4 @@
 <resources>
     <string name="app_name">Purdue Dining Courts</string>
     <string name="action_settings">Settings</string>
-
-    <!-- Temporary static list of locations. This should be populated from the api...eventually. -->
-    <string-array name="meals_array">
-        <item>Breakfast</item>
-        <item>Lunch</item>
-        <item>Late Lunch</item>
-        <item>Dinner</item>
-    </string-array>
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

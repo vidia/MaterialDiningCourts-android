@@ -12,10 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.davidtschida.materialdiningcourts.R;
 import com.davidtschida.materialdiningcourts.adapters.DiningCourtPagerAdapter;
@@ -24,7 +20,6 @@ import com.davidtschida.materialdiningcourts.eventbus.EventBus;
 import com.davidtschida.materialdiningcourts.eventbus.MealChosenEvent;
 import com.davidtschida.materialdiningcourts.fragments.DatePickerFragment;
 import com.joanzapata.iconify.IconDrawable;
-import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.MaterialIcons;
 import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
@@ -35,9 +30,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class MealViewActivity
-        extends AppCompatActivity implements AdapterView.OnItemSelectedListener
-        //implements DatePickerDialog.OnDateSetListener
+public class MealViewActivity extends AppCompatActivity
 {
 
     /**
@@ -47,8 +40,6 @@ public class MealViewActivity
     protected ViewPager mViewPager;
     @Bind(R.id.tabs)
     protected TabLayout tabLayout;
-    @Bind(R.id.meal_chooser_spinner)
-    protected Spinner mMealSpinner;
     @Bind(R.id.toolbar)
     protected Toolbar toolbar;
     @Bind(R.id.drawer_layout)
@@ -93,12 +84,34 @@ public class MealViewActivity
     public void dateChosen(DateChosenEvent event) {
         Timber.i("Got the date chosen event %s", event);
         mLastDateEvent = event;
+        if(mLastMealEvent != null) {
+            setMealTitle(mLastMealEvent.getMeal(), mLastDateEvent.getLocalDate());
+        }
     }
 
     @Subscribe @SuppressWarnings("unused")
     public void mealChosen(MealChosenEvent event) {
         Timber.i("Got the meal chosen event %s", event);
         mLastMealEvent = event;
+        if(mLastDateEvent != null) {
+            setMealTitle(mLastMealEvent.getMeal(), mLastDateEvent.getLocalDate());
+        }
+    }
+
+    private void setMealTitle(String meal, LocalDate localDate) {
+        if(getSupportActionBar() != null) {
+            String dateString;
+            if(localDate.equals(LocalDate.now())) {
+                dateString = "Today";
+            } else if(localDate.equals(LocalDate.now().plusDays(1))) {
+                dateString = "Tomorrow";
+            } else if(localDate.equals(LocalDate.now().plusDays(-1))) {
+                dateString = "Yesterday";
+            } else {
+                dateString = localDate.toString("MM/dd/yyyy");
+            }
+            getSupportActionBar().setTitle(String.format("%s %s", meal, dateString));
+        }
     }
 
     @Produce @SuppressWarnings("unused") public DateChosenEvent produceChosenDate() {
@@ -110,7 +123,7 @@ public class MealViewActivity
 
     @Produce @SuppressWarnings("unused") public MealChosenEvent produceChosenMeal() {
         if(mLastMealEvent == null) {
-            mLastMealEvent = new MealChosenEvent((String)mMealSpinner.getSelectedItem());
+            mLastMealEvent = new MealChosenEvent("Breakfast");
         }
         return mLastMealEvent;
     }
@@ -123,10 +136,7 @@ public class MealViewActivity
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
                         switch(menuItem.getItemId()) {
-                            case R.id.nav_pick_date:
-                                DialogFragment newFragment = new DatePickerFragment();
-                                newFragment.show(getSupportFragmentManager(), "datePicker");
-                                return true;
+                            // Meal related options.
                             case R.id.nav_breakfast:
                                 EventBus.getBus().post(new MealChosenEvent("Breakfast"));
                                 return true;
@@ -139,6 +149,18 @@ public class MealViewActivity
                             case R.id.nav_dinner:
                                 EventBus.getBus().post(new MealChosenEvent("Dinner"));
                                 return true;
+
+                            //Date Related options.
+                            case R.id.nav_date_today:
+                                EventBus.getBus().post(new DateChosenEvent(LocalDate.now()));
+                                return true;
+                            case R.id.nav_date_tomorrow:
+                                EventBus.getBus().post(new DateChosenEvent(LocalDate.now().plusDays(1)));
+                                return true;
+                            case R.id.nav_pick_date:
+                                DialogFragment newFragment = new DatePickerFragment();
+                                newFragment.show(getSupportFragmentManager(), "datePicker");
+                                return true;
                         }
 
                         return false;
@@ -148,25 +170,15 @@ public class MealViewActivity
 
     private void setupToolbar() {
         //Set up the spinner in the toolbar with meals data.
-
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.meals_array, R.layout.meals_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(R.layout.meals_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        mMealSpinner.setAdapter(adapter);
-        mMealSpinner.setOnItemSelectedListener(this);
-
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setTitle("Menus");
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(new IconDrawable(this, MaterialIcons.md_menu)
                     .colorRes(R.color.white)
                     .actionBarSize());
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
     }
 
     @Override
@@ -179,12 +191,6 @@ public class MealViewActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_meal_view, menu);
-
-        // Set an icon in the ActionBar
-        menu.findItem(R.id.action_pick_date).setIcon(
-                new IconDrawable(this, FontAwesomeIcons.fa_calendar)
-                        .colorRes(R.color.white)
-                        .actionBarSize());
         return true;
     }
 
@@ -197,23 +203,8 @@ public class MealViewActivity
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
-            case R.id.action_pick_date:
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getSupportFragmentManager(), "datePicker");
-                return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //Send event to refresh fragments.
-        EventBus.getBus().post(new MealChosenEvent((String) parent.getItemAtPosition(position)));
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 }

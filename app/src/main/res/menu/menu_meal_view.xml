@@ -8,12 +8,4 @@
         android:orderInCategory="100"
         app:showAsAction="never" />
 
-
-    <item
-        android:id="@+id/action_pick_date"
-        android:title="Pick a date"
-        app:showAsAction="ifRoom"
-        android:orderInCategory="1"
-        android:menuCategory="secondary" />
-
 </menu>

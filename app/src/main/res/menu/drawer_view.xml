@@ -1,32 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_breakfast"
-            android:title="Breakfast" />
-        <item
-            android:id="@+id/nav_lunch"
-            android:title="Lunch" />
-        <item
-            android:id="@+id/nav_late_lunch"
-            android:title="Late lunch" />
-        <item
-            android:id="@+id/nav_dinner"
-            android:title="Dinner" />
-    </group>
+    <item android:title="Favorites"
+        android:id="@+id/nav_favs" />
 
-    <item
-        android:id="@+id/nav_pick_date"
-        android:title="Pick date"/>
-
-    <item android:title="Other">
+    <item android:title="Meals">
         <menu>
-            <item
-                android:title="Next meal" />
-            <item
-                android:title="Favorites" />
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_breakfast"
+                    android:title="Breakfast" />
+                <item
+                    android:id="@+id/nav_lunch"
+                    android:title="Lunch" />
+                <item
+                    android:id="@+id/nav_late_lunch"
+                    android:title="Late lunch" />
+                <item
+                    android:id="@+id/nav_dinner"
+                    android:title="Dinner" />
+            </group>
         </menu>
     </item>
 
+    <item android:title="Days">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_date_today"
+                    android:title="Today" />
+                <item
+                    android:id="@+id/nav_date_tomorrow"
+                    android:title="Tomorrow" />
+                <item
+                    android:id="@+id/nav_pick_date"
+                    android:title="Pick a date"/>
+            </group>
+        </menu>
+    </item>
 </menu>
