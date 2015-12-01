@@ -4,7 +4,8 @@
     <item android:title="Favorites"
         android:id="@+id/nav_favs" />
 
-    <item android:title="Meals">
+    <item android:title="Meals"
+        android:id="@+id/nav_meals_header">
         <menu>
             <group android:checkableBehavior="single">
                 <item
@@ -23,7 +24,8 @@
         </menu>
     </item>
 
-    <item android:title="Days">
+    <item android:title="Days"
+        android:id="@+id/nav_days_header">
         <menu>
             <group android:checkableBehavior="single">
                 <item
