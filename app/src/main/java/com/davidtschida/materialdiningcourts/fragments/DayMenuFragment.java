@@ -152,7 +152,7 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
 
     private void setAdapterForFoodItems() {
         if (mFoodItemsAdapter == null && mFoodItems != null && mFoodItems.size() > 0) {
-            mFoodItemsAdapter = new FoodItemsAdapter(mFoodItems);
+            mFoodItemsAdapter = new FoodItemsAdapter(getActivity().getApplicationContext(), mFoodItems);
         }
         mEntreeItemsRecycleView.setAdapter(mFoodItemsAdapter);
     }

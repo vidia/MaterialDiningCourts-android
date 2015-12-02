@@ -16,16 +16,13 @@
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         tools:text="Hamburgers" />
 
-    <com.joanzapata.iconify.widget.IconTextView
+    <ToggleButton
         android:id="@+id/favoritesHeart"
         android:layout_height="24dp"
         android:layout_width="24dp"
         android:layout_alignParentEnd="true"
-        android:text="{fa-heart}"
         android:gravity="center"
-        android:layout_centerVertical="true"
-        android:textSize="20sp"
-        android:textColor="@color/favoriteNotSelected" />
+        android:layout_centerVertical="true" />
 
     <TextView
         android:layout_width="wrap_content"
