@@ -11,13 +11,13 @@ import lombok.Data;
  */
 @Data
 public class FoodItem {
-    @SerializedName("Id")
+    @SerializedName("ID")
     String Id;
 
     @SerializedName("Name")
     String name;
 
-    @SerializedName("isVegetarian")
+    @SerializedName("IsVegetarian")
     boolean isVegetarian;
 
     @SerializedName("Allergens")
