@@ -8,7 +8,7 @@
     <color name="hoursTextBackground">#91e5e5e5</color>
     <color name="foodHeadingTextColor">#FF64908A</color>
     <color name="favoriteColor">#FFCC2A41</color>
-    <color name="favoriteNotSelected">#59000000</color>
+    <color name="favoriteNotSelected">#7f8182</color>
 
     <color name="foodItemTextColor">#DE140912</color>
     <color name="tabSelectedTextColor">#FFFFFFFF</color>
