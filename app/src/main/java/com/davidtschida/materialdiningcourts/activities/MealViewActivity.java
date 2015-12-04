@@ -127,53 +127,13 @@ public class MealViewActivity extends AppCompatActivity
 
     @Produce @SuppressWarnings("unused") public MealChosenEvent produceChosenMeal() {
         if(mLastMealEvent == null) {
-            mLastMealEvent = new MealChosenEvent("Breakfast");
+            //mLastMealEvent = new MealChosenEvent("Breakfast");
         }
         return mLastMealEvent;
     }
 
     private void setupDrawerContent() {
-        mNavigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
-                        switch(menuItem.getItemId()) {
-                            // Meal related options.
-                            case R.id.nav_breakfast:
-                                EventBus.getBus().post(new MealChosenEvent("Breakfast"));
-                                return true;
-                            case R.id.nav_lunch:
-                                EventBus.getBus().post(new MealChosenEvent("Lunch"));
-                                return true;
-                            case R.id.nav_late_lunch:
-                                EventBus.getBus().post(new MealChosenEvent("Late Lunch"));
-                                return true;
-                            case R.id.nav_dinner:
-                                EventBus.getBus().post(new MealChosenEvent("Dinner"));
-                                return true;
-
-                            //Date Related options.
-                            case R.id.nav_date_today:
-                                EventBus.getBus().post(new DateChosenEvent(LocalDate.now()));
-                                return true;
-                            case R.id.nav_date_tomorrow:
-                                EventBus.getBus().post(new DateChosenEvent(LocalDate.now().plusDays(1)));
-                                return true;
-                            case R.id.nav_pick_date:
-                                DialogFragment newFragment = new DatePickerFragment();
-                                newFragment.show(getSupportFragmentManager(), "datePicker");
-                                return true;
-
-                            //Unimplemented selections
-                            case R.id.nav_favs:
-                                Snackbar.make(mCoordinatorLayout, "Listing favorites is under construction!", Snackbar.LENGTH_LONG).show();
-                        }
-
-                        return false;
-                    }
-                });
+        mNavigationView.setNavigationItemSelectedListener(new MealViewActivity.NavDrawerItemSelectedListener());
     }
 
     private void setupToolbar() {
@@ -214,5 +174,47 @@ public class MealViewActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    class NavDrawerItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
+
+        @Override
+        public boolean onNavigationItemSelected(MenuItem menuItem) {
+            menuItem.setChecked(true);
+            mDrawerLayout.closeDrawers();
+            switch(menuItem.getItemId()) {
+                // Meal related options.
+                case R.id.nav_breakfast:
+                    EventBus.getBus().post(new MealChosenEvent("Breakfast"));
+                    return true;
+                case R.id.nav_lunch:
+                    EventBus.getBus().post(new MealChosenEvent("Lunch"));
+                    return true;
+                case R.id.nav_late_lunch:
+                    EventBus.getBus().post(new MealChosenEvent("Late Lunch"));
+                    return true;
+                case R.id.nav_dinner:
+                    EventBus.getBus().post(new MealChosenEvent("Dinner"));
+                    return true;
+
+                //Date Related options.
+                case R.id.nav_date_today:
+                    EventBus.getBus().post(new DateChosenEvent(LocalDate.now()));
+                    return true;
+                case R.id.nav_date_tomorrow:
+                    EventBus.getBus().post(new DateChosenEvent(LocalDate.now().plusDays(1)));
+                    return true;
+                case R.id.nav_pick_date:
+                    DialogFragment newFragment = new DatePickerFragment();
+                    newFragment.show(getSupportFragmentManager(), "datePicker");
+                    return true;
+
+                //Unimplemented selections
+                case R.id.nav_favs:
+                    Snackbar.make(mCoordinatorLayout, "Listing favorites is under construction!", Snackbar.LENGTH_LONG).show();
+            }
+
+            return false;
+        }
     }
 }
