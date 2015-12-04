@@ -1,7 +1,9 @@
 package com.davidtschida.materialdiningcourts.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -46,6 +48,8 @@ public class MealViewActivity extends AppCompatActivity
     protected DrawerLayout mDrawerLayout;
     @Bind(R.id.nav_view)
     protected NavigationView mNavigationView;
+    @Bind(R.id.coordinator)
+    protected CoordinatorLayout mCoordinatorLayout;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -161,6 +165,10 @@ public class MealViewActivity extends AppCompatActivity
                                 DialogFragment newFragment = new DatePickerFragment();
                                 newFragment.show(getSupportFragmentManager(), "datePicker");
                                 return true;
+
+                            //Unimplemented selections
+                            case R.id.nav_favs:
+                                Snackbar.make(mCoordinatorLayout, "Listing favorites is under construction!", Snackbar.LENGTH_LONG).show();
                         }
 
                         return false;
