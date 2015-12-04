@@ -139,11 +139,7 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
 
     private void populateDataFromApi() {
         Timber.i("Setting in progress view");
-        mHoursDisplay.setVisibility(View.INVISIBLE);
-        mEntreeItemsRecycleView.setVisibility(View.INVISIBLE);
-        mEntreeHeader.setVisibility(View.INVISIBLE);
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressText.setVisibility(View.VISIBLE);
+        setViewsLoading();
 
         Timber.i("Requesting getDiningMenu(%s, %s)", mDiningCourt, mLocalDate.toString("MM-dd-yyyy"));
         MenusApi.getApiService().getDiningMenu(mDiningCourt, mLocalDate.toString("MM-dd-yyyy"))
@@ -176,6 +172,8 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
         //mEntreeItemsRecycleView.setNestedScrollingEnabled(false);
         mEntreeItemsRecycleView.setHasFixedSize(true);
 
+        setViewsLoading();
+
         return rootView;
     }
 
@@ -193,32 +191,21 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
             return;
         }
 
-        Log.d(TAG + mDiningCourt, "Using given meal");
         mMeal = response.body().getMealByName(mMealString);
 
         if(mMeal == null) {
             Timber.i("That meal isn't available at the current dining court.");
-            setHoursDisplayText(mMealString + " isn't being served here");
-            mHoursDisplay.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(View.INVISIBLE);
-            mProgressText.setVisibility(View.INVISIBLE);
+            setMealIsntBeingServed();
             return;
         }
 
         if("Closed".equalsIgnoreCase(mMeal.getStatus())) {
             Timber.i("The selected meal is currently closed.");
-            setHoursDisplayText("Closed for " + mMealString);
-            mHoursDisplay.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(View.INVISIBLE);
-            mProgressText.setVisibility(View.INVISIBLE);
+            setViewMealClosed();
             return;
         }
 
-        mHoursDisplay.setVisibility(View.VISIBLE);
-        mEntreeItemsRecycleView.setVisibility(View.VISIBLE);
-        mEntreeHeader.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.INVISIBLE);
-        mProgressText.setVisibility(View.INVISIBLE);
+        setViewMealHasData();
 
         if (mMeal.startsAfter(LocalTime.now())) {
             setHoursDisplayText(mMeal.getName() + " opens at " + mMeal.getHours().getStartLocalTime().toString("HH:mm"));
@@ -231,6 +218,36 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
         mFoodItems = mMeal.getAllFoodItems();
         Log.d(TAG, "There are (" + mFoodItems.size() + ") total foods.");
         setAdapterForFoodItems();
+    }
+
+    private void setViewMealHasData() {
+        mHoursDisplay.setVisibility(View.VISIBLE);
+        mEntreeItemsRecycleView.setVisibility(View.VISIBLE);
+        mEntreeHeader.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.INVISIBLE);
+        mProgressText.setVisibility(View.INVISIBLE);
+    }
+
+    private void setViewMealClosed() {
+        setHoursDisplayText("Closed for " + mMealString);
+        mHoursDisplay.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.INVISIBLE);
+        mProgressText.setVisibility(View.INVISIBLE);
+    }
+
+    private void setMealIsntBeingServed() {
+        setHoursDisplayText(mMealString + " isn't being served here");
+        mHoursDisplay.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.INVISIBLE);
+        mProgressText.setVisibility(View.INVISIBLE);
+    }
+
+    private void setViewsLoading() {
+        mHoursDisplay.setVisibility(View.INVISIBLE);
+        mEntreeItemsRecycleView.setVisibility(View.INVISIBLE);
+        mEntreeHeader.setVisibility(View.INVISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressText.setVisibility(View.VISIBLE);
     }
 
     @Override
