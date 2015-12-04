@@ -2,25 +2,19 @@ package com.davidtschida.materialdiningcourts.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import com.davidtschida.materialdiningcourts.R;
 import com.davidtschida.materialdiningcourts.adapters.DiningCourtPagerAdapter;
 import com.davidtschida.materialdiningcourts.eventbus.DateChosenEvent;
 import com.davidtschida.materialdiningcourts.eventbus.EventBus;
 import com.davidtschida.materialdiningcourts.eventbus.MealChosenEvent;
-import com.davidtschida.materialdiningcourts.fragments.DatePickerFragment;
+import com.davidtschida.materialdiningcourts.eventbus.ShowSnackbarEvent;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.MaterialIcons;
 import com.squareup.otto.Produce;
@@ -32,7 +26,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class MealViewActivity extends AppCompatActivity
+public class MealViewActivity extends NavDrawerActivity
 {
 
     /**
@@ -44,10 +38,7 @@ public class MealViewActivity extends AppCompatActivity
     protected TabLayout tabLayout;
     @Bind(R.id.toolbar)
     protected Toolbar toolbar;
-    @Bind(R.id.drawer_layout)
-    protected DrawerLayout mDrawerLayout;
-    @Bind(R.id.nav_view)
-    protected NavigationView mNavigationView;
+
     @Bind(R.id.coordinator)
     protected CoordinatorLayout mCoordinatorLayout;
 
@@ -70,7 +61,6 @@ public class MealViewActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setupToolbar();
-        setupDrawerContent();
         //Must be done AFTER initing the spinner. Relies on spinner having a value.
         EventBus.getBus().register(this);
 
@@ -100,6 +90,11 @@ public class MealViewActivity extends AppCompatActivity
         if(mLastDateEvent != null) {
             setMealTitle(mLastMealEvent.getMeal(), mLastDateEvent.getLocalDate());
         }
+    }
+
+    @Subscribe @SuppressWarnings("unused")
+    public void onShowSnackbarEvent(ShowSnackbarEvent event) {
+        Snackbar.make(mCoordinatorLayout, event.getMessage(), Snackbar.LENGTH_SHORT).show();
     }
 
     private void setMealTitle(String meal, LocalDate localDate) {
@@ -132,9 +127,6 @@ public class MealViewActivity extends AppCompatActivity
         return mLastMealEvent;
     }
 
-    private void setupDrawerContent() {
-        mNavigationView.setNavigationItemSelectedListener(new MealViewActivity.NavDrawerItemSelectedListener());
-    }
 
     private void setupToolbar() {
         //Set up the spinner in the toolbar with meals data.
@@ -160,61 +152,5 @@ public class MealViewActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_meal_view, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        switch(item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    class NavDrawerItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
-
-        @Override
-        public boolean onNavigationItemSelected(MenuItem menuItem) {
-            menuItem.setChecked(true);
-            mDrawerLayout.closeDrawers();
-            switch(menuItem.getItemId()) {
-                // Meal related options.
-                case R.id.nav_breakfast:
-                    EventBus.getBus().post(new MealChosenEvent("Breakfast"));
-                    return true;
-                case R.id.nav_lunch:
-                    EventBus.getBus().post(new MealChosenEvent("Lunch"));
-                    return true;
-                case R.id.nav_late_lunch:
-                    EventBus.getBus().post(new MealChosenEvent("Late Lunch"));
-                    return true;
-                case R.id.nav_dinner:
-                    EventBus.getBus().post(new MealChosenEvent("Dinner"));
-                    return true;
-
-                //Date Related options.
-                case R.id.nav_date_today:
-                    EventBus.getBus().post(new DateChosenEvent(LocalDate.now()));
-                    return true;
-                case R.id.nav_date_tomorrow:
-                    EventBus.getBus().post(new DateChosenEvent(LocalDate.now().plusDays(1)));
-                    return true;
-                case R.id.nav_pick_date:
-                    DialogFragment newFragment = new DatePickerFragment();
-                    newFragment.show(getSupportFragmentManager(), "datePicker");
-                    return true;
-
-                //Unimplemented selections
-                case R.id.nav_favs:
-                    Snackbar.make(mCoordinatorLayout, "Listing favorites is under construction!", Snackbar.LENGTH_LONG).show();
-            }
-
-            return false;
-        }
     }
 }
