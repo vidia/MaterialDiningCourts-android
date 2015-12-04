@@ -9,6 +9,7 @@ import org.joda.time.LocalTime;
 import java.util.List;
 
 import lombok.Data;
+import timber.log.Timber;
 
 /**
  * Created by david on 10/22/2015.
@@ -30,6 +31,7 @@ public class DayMenu {
     List<Meal> meals;
 
     public Meal getMealByName(String mealName) {
+        Timber.i("getMealByName(%s)", mealName);
         for (Meal meal : getMeals()) {
             if (meal.getName().equalsIgnoreCase(mealName)) {
                 return meal;

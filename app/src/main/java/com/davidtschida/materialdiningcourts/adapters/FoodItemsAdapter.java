@@ -66,10 +66,10 @@ public class FoodItemsAdapter extends RecyclerView.Adapter<FoodItemsAdapter.View
         holder.mFavoritesButton.setBackgroundDrawable(null);
 
         if(holder.mFavoritesButton.isChecked()) {
-            Timber.d("Heart is on: " + mFoodsList.get(position).getName());
+            Timber.d("Heart is on: %s", mFoodsList.get(position).getName());
             holder.mFavoritesButton.setButtonDrawable(redHeart);
         } else {
-            Timber.d("Heart is off: " + mFoodsList.get(position).getName());
+            Timber.d("Heart is off: %s", mFoodsList.get(position).getName());
             holder.mFavoritesButton.setButtonDrawable(greyHeart);
         }
 
@@ -82,10 +82,10 @@ public class FoodItemsAdapter extends RecyclerView.Adapter<FoodItemsAdapter.View
                                 .putBoolean(mFoodsList.get(position).getId(), isChecked)
                                 .apply();
                         if(isChecked) {
-                            Timber.d("Heart is on: " + mFoodsList.get(position).getName());
+                            Timber.d("Heart is on: %s", mFoodsList.get(position).getName());
                             buttonView.setButtonDrawable(redHeart);
                         } else {
-                            Timber.d("Heart is off: " + mFoodsList.get(position).getName());
+                            Timber.d("Heart is off: %s", mFoodsList.get(position).getName());
                             buttonView.setButtonDrawable(greyHeart);
                         }
                     }
