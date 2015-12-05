@@ -15,6 +15,9 @@ import com.davidtschida.materialdiningcourts.eventbus.DateChosenEvent;
 import com.davidtschida.materialdiningcourts.eventbus.EventBus;
 import com.davidtschida.materialdiningcourts.eventbus.MealChosenEvent;
 import com.davidtschida.materialdiningcourts.eventbus.ShowSnackbarEvent;
+import com.davidtschida.purduemenu.MenusApi;
+import com.davidtschida.purduemenu.models.DayMenu;
+import com.davidtschida.purduemenu.models.Locations;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.MaterialIcons;
 import com.squareup.otto.Produce;
@@ -22,8 +25,11 @@ import com.squareup.otto.Subscribe;
 
 import org.joda.time.LocalDate;
 
+import java.util.ArrayList;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
 import timber.log.Timber;
 
 public class MealViewActivity extends NavDrawerActivity
@@ -72,6 +78,21 @@ public class MealViewActivity extends NavDrawerActivity
 
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(mViewPager);
+
+
+        Observable<Locations> earhartMenu = MenusApi.getApiService().getDiningLocationsObservable();
+
+        earhartMenu.flatMapIterable(Locations::getLocations)
+                .flatMap(diningLocation -> MenusApi.getApiService().getDiningMenuObservable(diningLocation.getName(), "12-4-2015"))
+                .doOnNext(dayMenu1 -> {
+                    Timber.i("Have a dayMenu for %s", dayMenu1.getLocation());
+                })
+                .collect(() -> new ArrayList<DayMenu>(), ArrayList::add)
+                .subscribe(dayMenus -> {
+                    for (DayMenu menu : dayMenus) {
+                        Timber.d("I have a completed menu for %s", menu.getLocation());
+                    }
+                }, throwable -> Timber.e(throwable, "An error was thrown."));
     }
 
     @Subscribe @SuppressWarnings("unused")
