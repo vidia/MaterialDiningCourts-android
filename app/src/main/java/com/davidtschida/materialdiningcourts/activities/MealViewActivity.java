@@ -122,7 +122,7 @@ public class MealViewActivity extends NavDrawerActivity
 
     @Produce @SuppressWarnings("unused") public MealChosenEvent produceChosenMeal() {
         if(mLastMealEvent == null) {
-            //mLastMealEvent = new MealChosenEvent("Breakfast");
+            mLastMealEvent = new MealChosenEvent("Breakfast");
         }
         return mLastMealEvent;
     }
