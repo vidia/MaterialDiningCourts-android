@@ -58,7 +58,11 @@ public class FoodItemsAdapter extends RecyclerView.Adapter<FoodItemsAdapter.View
     public void onBindViewHolder(ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mRootView.setBackgroundColor((position % 2 == 0) ? Color.WHITE : Color.LTGRAY);
+        if(position % 2 == 0) {
+            holder.mRootView.setBackgroundColor(Color.WHITE);
+        } else {
+            holder.mRootView.setBackgroundResource(R.color.foodItemBackgroundColorEven);
+        }
         holder.mTextView.setText(mFoodsList.get(position).getName());
         holder.mFavoritesButton.setChecked(mSharedPreferences
                 .getBoolean(mFoodsList.get(position).getId(), false));

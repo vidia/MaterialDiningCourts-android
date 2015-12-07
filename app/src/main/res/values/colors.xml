@@ -6,14 +6,15 @@
     <color name="windowBackground">#FFFFFFFF</color>
 
     <color name="hoursTextBackground">#91e5e5e5</color>
-    <color name="foodHeadingTextColor">#FF64908A</color>
+    <color name="foodHeadingTextColor">#64908A</color>
     <color name="favoriteColor">#FFCC2A41</color>
-    <color name="favoriteNotSelected">#7f8182</color>
+    <color name="favoriteNotSelected">#BDBDBD</color>
 
     <color name="foodItemTextColor">#DE140912</color>
     <color name="tabSelectedTextColor">#FFFFFFFF</color>
     <color name="tabUnselectedTextColor">#B3FFFFFF</color>
     <color name="tabSelectedIndicatorColor">#FFE8CAA4</color>
+    <color name="foodItemBackgroundColorEven">#EEEEEE</color>
 
     <color name="colorAccent">#FF4081</color>
     <color name="red">#f00</color>
