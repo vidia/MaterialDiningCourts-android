@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class MealViewActivity extends NavDrawerActivity
@@ -79,20 +81,24 @@ public class MealViewActivity extends NavDrawerActivity
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(mViewPager);
 
+        Observable<Locations> locationsObservable = MenusApi.getApiService().getDiningLocationsObservable();
 
-        Observable<Locations> earhartMenu = MenusApi.getApiService().getDiningLocationsObservable();
-
-        earhartMenu.flatMapIterable(Locations::getLocations)
+        locationsObservable.flatMapIterable(Locations::getLocations)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(Schedulers.newThread())
                 .flatMap(diningLocation -> MenusApi.getApiService().getDiningMenuObservable(diningLocation.getName(), "12-4-2015"))
-                .doOnNext(dayMenu1 -> {
-                    Timber.i("Have a dayMenu for %s", dayMenu1.getLocation());
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(dayMenu -> {
+                    Timber.i("Have a dayMenu for %s", dayMenu.getLocation());
                 })
                 .collect(() -> new ArrayList<DayMenu>(), ArrayList::add)
                 .subscribe(dayMenus -> {
                     for (DayMenu menu : dayMenus) {
                         Timber.d("I have a completed menu for %s", menu.getLocation());
                     }
+                    EventBus.getBus().post(new MealChosenEvent("Lunch"));
                 }, throwable -> Timber.e(throwable, "An error was thrown."));
+
     }
 
     @Subscribe @SuppressWarnings("unused")
@@ -112,6 +118,7 @@ public class MealViewActivity extends NavDrawerActivity
             setMealTitle(mLastMealEvent.getMeal(), mLastDateEvent.getLocalDate());
         }
     }
+
 
     @Subscribe @SuppressWarnings("unused")
     public void onShowSnackbarEvent(ShowSnackbarEvent event) {
