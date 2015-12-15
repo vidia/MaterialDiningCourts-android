@@ -125,7 +125,12 @@ public class MealViewActivity extends NavDrawerActivity
                             EventBus.getBus().post(new MealChosenEvent("Breakfast"));
                         }
                     }
-                }, throwable -> Timber.e(throwable, "An error was thrown."));
+                }, throwable -> {
+                    Timber.e(throwable, "An error was thrown in RxJava or Retrofit.");
+                    EventBus.getBus().post(new ShowSnackbarEvent("There was an error choosing a meal based on the time"));
+                    EventBus.getBus().post(new DateChosenEvent(LocalDate.now()));
+                    EventBus.getBus().post(new MealChosenEvent("Breakfast"));
+                });
     }
 
     @Subscribe @SuppressWarnings("unused")
