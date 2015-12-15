@@ -4,7 +4,11 @@ import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.List;
 
@@ -30,6 +34,12 @@ public class DayMenu {
     @SerializedName("Meals")
     List<Meal> meals;
 
+    public LocalDate getLocalDate() {
+        final DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd/yyyy");
+        return dtf.parseLocalDate(date);
+    }
+
+
     public Meal getMealByName(String mealName) {
         Timber.i("getMealByName(%s)", mealName);
         for (Meal meal : getMeals()) {
@@ -46,28 +56,86 @@ public class DayMenu {
      * <p/>
      * NOTE: If the given time is after all meals for this day, NULL is returned.
      *
-     * @param localTime the time to
+     * @param dateTime the time to
      * @return the meal for the given time, or null if time is after all meals.
      */
-    public Meal getMealForTime(LocalTime localTime) {
-        Meal nextOrCurrentMeal = null;
+    public Meal getCurrentOrNextMealForDateTime(DateTime dateTime) {
+        Timber.d("getCurrentOrNextMealForDateTime(%s)); Location: %s; Date: %s", dateTime.toString(), location, date);
 
-        Log.d(TAG, "getMealForTime(" + localTime.toString() + "); Location: " + location + "; Date: " + date);
+        Meal nextOrCurrentMeal = null;
+        LocalTime localTime = dateTime.toLocalTime();
+        LocalDate localDate = dateTime.toLocalDate();
+
+        if(!getLocalDate().isEqual(localDate)) {
+            return null; //The days are not the same, so there are no meals for the time
+        }
+
+        for (Meal meal : getMeals()) {
+            Timber.d("Checking meal %s", meal.getName());
+            if (meal.containsTime(localTime)) {
+                Timber.d("Meal contains the time, returning.");
+                return meal;
+            } else if (meal.endsBefore(localTime)) {
+                Timber.d("Meal ends before the time");
+                continue;
+            } else if (meal.startsAfter(localTime)) {
+                Timber.d("Meal starts after the given time");
+                if (nextOrCurrentMeal == null) {
+                    nextOrCurrentMeal = meal;
+                } else {
+                    if (meal.timeUntilStartFrom(localTime) < nextOrCurrentMeal.timeUntilStartFrom(localTime)) {
+                        Timber.d("Meal starts sooner than the last closest meal");
+                        nextOrCurrentMeal = meal;
+                    }
+                }
+            }
+        }
+        return nextOrCurrentMeal;
+    }
+
+    /**
+     * Returns the current meal if the given datetime is within a
+     * @param dateTime
+     * @return
+     */
+    public Meal getCurrentMealForDateTime(DateTime dateTime) {
+        LocalTime localTime = dateTime.toLocalTime();
+        LocalDate localDate = dateTime.toLocalDate();
+
+        if(!getLocalDate().isEqual(localDate)) {
+            return null; //The days are not the same, so there are no meals for the time
+        }
+
         for (Meal meal : getMeals()) {
             Log.d(TAG, "Checking meal " + meal.getName());
             if (meal.containsTime(localTime)) {
                 Log.d(TAG, "Meal contains the time, returning.");
                 return meal;
-            } else if (meal.endsBefore(localTime)) {
-                Log.d(TAG, "Meal ends before the time");
-                continue;
-            } else if (meal.startsAfter(localTime)) {
-                Log.d(TAG, "Meal starts after the given time");
+            }
+        }
+        return null; //There were no meals in progress.
+    }
+
+    public Meal getNextMealForDateTime(DateTime dateTime) {
+        Timber.d("getNextMealForDateTime(%s)); Location: %s; Date: %s", dateTime.toString(), location, date);
+
+        Meal nextOrCurrentMeal = null;
+        LocalTime localTime = dateTime.toLocalTime();
+        LocalDate localDate = dateTime.toLocalDate();
+
+        if(!getLocalDate().isEqual(localDate)) {
+            return null; //The days are not the same, so there are no meals for the time
+        }
+
+        for (Meal meal : getMeals()) {
+            Timber.d("Checking meal %s", meal.getName());
+            if (meal.startsAfter(localTime)) {
+                Timber.d("Meal starts after the given time");
                 if (nextOrCurrentMeal == null) {
                     nextOrCurrentMeal = meal;
                 } else {
                     if (meal.timeUntilStartFrom(localTime) < nextOrCurrentMeal.timeUntilStartFrom(localTime)) {
-                        Log.d(TAG, "Meal starts sooner than the last closest meal");
+                        Timber.d("Meal starts sooner than the last closest meal");
                         nextOrCurrentMeal = meal;
                     }
                 }

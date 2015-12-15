@@ -18,11 +18,15 @@ import com.davidtschida.materialdiningcourts.eventbus.ShowSnackbarEvent;
 import com.davidtschida.purduemenu.MenusApi;
 import com.davidtschida.purduemenu.models.DayMenu;
 import com.davidtschida.purduemenu.models.Locations;
+import com.davidtschida.purduemenu.models.Meal;
+import com.davidtschida.purduemenu.util.CurrentMealCollection;
+import com.davidtschida.purduemenu.util.NextMealsCollection;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.MaterialIcons;
 import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
@@ -81,6 +85,10 @@ public class MealViewActivity extends NavDrawerActivity
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(mViewPager);
 
+        initiateDefaultMealSelection();
+    }
+
+    private void initiateDefaultMealSelection() {
         Observable<Locations> locationsObservable = MenusApi.getApiService().getDiningLocationsObservable();
 
         locationsObservable.flatMapIterable(Locations::getLocations)
@@ -93,12 +101,31 @@ public class MealViewActivity extends NavDrawerActivity
                 })
                 .collect(() -> new ArrayList<DayMenu>(), ArrayList::add)
                 .subscribe(dayMenus -> {
+                    CurrentMealCollection currentMeals = new CurrentMealCollection();
                     for (DayMenu menu : dayMenus) {
                         Timber.d("I have a completed menu for %s", menu.getLocation());
+                        currentMeals.addFromDayMenu(menu, DateTime.now());
                     }
-                    EventBus.getBus().post(new MealChosenEvent("Lunch"));
+                    Meal currentMeal = currentMeals.getCurrentMeal();
+                    if(currentMeal != null) {
+                        EventBus.getBus().post(new MealChosenEvent(currentMeal.getName()));
+                    } else {
+                        NextMealsCollection nextMeals = new NextMealsCollection();
+                        for (DayMenu menu : dayMenus) {
+                            Timber.d("I have a completed menu for %s", menu.getLocation());
+                            nextMeals.addFromDayMenu(menu, DateTime.now());
+                        }
+                        Meal nextMeal = nextMeals.getNextMeal();
+                        if(nextMeal != null) {
+                            EventBus.getBus().post(new MealChosenEvent(nextMeal.getName()));
+                        } else {
+                            Timber.w("There were no current or next meals, displaying tomorrow's breakfast instead");
+                            EventBus.getBus().post(new ShowSnackbarEvent("All meals are closed for the day, here's tomorrow's Breakfast"));
+                            EventBus.getBus().post(new DateChosenEvent(LocalDate.now().plusDays(1)));
+                            EventBus.getBus().post(new MealChosenEvent("Breakfast"));
+                        }
+                    }
                 }, throwable -> Timber.e(throwable, "An error was thrown."));
-
     }
 
     @Subscribe @SuppressWarnings("unused")
