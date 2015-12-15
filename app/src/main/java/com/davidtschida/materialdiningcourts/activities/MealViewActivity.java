@@ -74,9 +74,10 @@ public class MealViewActivity extends NavDrawerActivity
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(mViewPager);
 
-        new DefaultMealChooser().initiateDefaultMealSelection();
+        if(mLastMealEvent == null) {
+            new DefaultMealChooser().initiateDefaultMealSelection();
+        }
     }
-
 
     @Subscribe @SuppressWarnings("unused")
     public void dateChosen(DateChosenEvent event) {
