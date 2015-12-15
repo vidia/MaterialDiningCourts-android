@@ -15,6 +15,7 @@ import com.davidtschida.materialdiningcourts.eventbus.DateChosenEvent;
 import com.davidtschida.materialdiningcourts.eventbus.EventBus;
 import com.davidtschida.materialdiningcourts.eventbus.MealChosenEvent;
 import com.davidtschida.materialdiningcourts.eventbus.ShowSnackbarEvent;
+import com.davidtschida.purduemenu.util.DefaultMealChooser;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.MaterialIcons;
 import com.squareup.otto.Produce;
@@ -72,7 +73,10 @@ public class MealViewActivity extends NavDrawerActivity
 
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(mViewPager);
+
+        new DefaultMealChooser().initiateDefaultMealSelection();
     }
+
 
     @Subscribe @SuppressWarnings("unused")
     public void dateChosen(DateChosenEvent event) {
@@ -91,6 +95,7 @@ public class MealViewActivity extends NavDrawerActivity
             setMealTitle(mLastMealEvent.getMeal(), mLastDateEvent.getLocalDate());
         }
     }
+
 
     @Subscribe @SuppressWarnings("unused")
     public void onShowSnackbarEvent(ShowSnackbarEvent event) {
