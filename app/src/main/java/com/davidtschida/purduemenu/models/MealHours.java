@@ -14,6 +14,8 @@ import lombok.Data;
  */
 @Data
 public class MealHours {
+    static DateTimeZone mDateTimeZone = DateTimeZone.forID("America/Indiana/Indianapolis");
+
     @SerializedName("StartTime")
     String startTime;
 
@@ -21,20 +23,16 @@ public class MealHours {
     String endTime;
 
     public LocalTime getStartLocalTime() {
-        DateTimeZone eastern = DateTimeZone.forID("America/Indiana/Indianapolis");
-
         DateTime startDateTime = DateTime.parse(getStartTime(),
                 DateTimeFormat.forPattern("HH:mm:ss"));
 
-        return new LocalTime(startDateTime, eastern);
+        return new LocalTime(startDateTime, mDateTimeZone);
     }
 
     public LocalTime getEndLocalTime() {
-        DateTimeZone eastern = DateTimeZone.forID("America/Indiana/Indianapolis");
-
         DateTime endDateTime = DateTime.parse(getEndTime(),
                 DateTimeFormat.forPattern("HH:mm:ss"));
 
-        return new LocalTime(endDateTime, eastern);
+        return new LocalTime(endDateTime, mDateTimeZone);
     }
 }
