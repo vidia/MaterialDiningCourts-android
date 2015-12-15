@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.functions.Func0;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -36,7 +37,7 @@ public class DefaultMealChooser implements Action1<ArrayList<DayMenu>> {
                 .doOnNext(dayMenu -> {
                     Timber.i("Have a dayMenu for %s", dayMenu.getLocation());
                 })
-                .collect(() -> new ArrayList<DayMenu>(), ArrayList::add)
+                .collect((Func0<ArrayList<DayMenu>>) ArrayList::new, ArrayList::add)
                 .subscribe(this, throwable -> {
                     Timber.e(throwable, "An error was thrown in RxJava or Retrofit.");
                     EventBus.getBus().post(new ShowSnackbarEvent("There was an error choosing a meal based on the time"));

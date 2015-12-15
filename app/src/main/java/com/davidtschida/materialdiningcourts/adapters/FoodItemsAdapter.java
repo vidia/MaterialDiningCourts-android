@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -78,20 +77,17 @@ public class FoodItemsAdapter extends RecyclerView.Adapter<FoodItemsAdapter.View
         }
 
         holder.mFavoritesButton.setOnCheckedChangeListener(
-                new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        mSharedPreferences
-                                .edit()
-                                .putBoolean(mFoodsList.get(position).getId(), isChecked)
-                                .apply();
-                        if(isChecked) {
-                            Timber.d("Heart is on: %s", mFoodsList.get(position).getName());
-                            buttonView.setButtonDrawable(redHeart);
-                        } else {
-                            Timber.d("Heart is off: %s", mFoodsList.get(position).getName());
-                            buttonView.setButtonDrawable(greyHeart);
-                        }
+                (buttonView, isChecked) -> {
+                    mSharedPreferences
+                            .edit()
+                            .putBoolean(mFoodsList.get(position).getId(), isChecked)
+                            .apply();
+                    if(isChecked) {
+                        Timber.d("Heart is on: %s", mFoodsList.get(position).getName());
+                        buttonView.setButtonDrawable(redHeart);
+                    } else {
+                        Timber.d("Heart is off: %s", mFoodsList.get(position).getName());
+                        buttonView.setButtonDrawable(greyHeart);
                     }
                 });
     }
