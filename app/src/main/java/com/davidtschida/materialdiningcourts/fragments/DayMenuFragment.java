@@ -215,7 +215,7 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
             setHoursDisplayText(mMeal.getName() + " ended at " + mMeal.getHours().getEndLocalTime().toString("HH:mm"));
         }
 
-        mFoodItems = mMeal.getAllFoodItems();
+        mFoodItems = mMeal.getAllUniqueFoodItems();
         Log.d(TAG, "There are (" + mFoodItems.size() + ") total foods.");
         setAdapterForFoodItems();
     }
