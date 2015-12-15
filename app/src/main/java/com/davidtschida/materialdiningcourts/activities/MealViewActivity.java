@@ -15,27 +15,16 @@ import com.davidtschida.materialdiningcourts.eventbus.DateChosenEvent;
 import com.davidtschida.materialdiningcourts.eventbus.EventBus;
 import com.davidtschida.materialdiningcourts.eventbus.MealChosenEvent;
 import com.davidtschida.materialdiningcourts.eventbus.ShowSnackbarEvent;
-import com.davidtschida.purduemenu.MenusApi;
-import com.davidtschida.purduemenu.models.DayMenu;
-import com.davidtschida.purduemenu.models.Locations;
-import com.davidtschida.purduemenu.models.Meal;
-import com.davidtschida.purduemenu.util.CurrentMealCollection;
-import com.davidtschida.purduemenu.util.NextMealsCollection;
+import com.davidtschida.purduemenu.util.DefaultMealChooser;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.MaterialIcons;
 import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-
-import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class MealViewActivity extends NavDrawerActivity
@@ -85,53 +74,9 @@ public class MealViewActivity extends NavDrawerActivity
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(mViewPager);
 
-        initiateDefaultMealSelection();
+        new DefaultMealChooser().initiateDefaultMealSelection();
     }
 
-    private void initiateDefaultMealSelection() {
-        Observable<Locations> locationsObservable = MenusApi.getApiService().getDiningLocationsObservable();
-
-        locationsObservable.flatMapIterable(Locations::getLocations)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(Schedulers.newThread())
-                .flatMap(diningLocation -> MenusApi.getApiService().getDiningMenuObservable(diningLocation.getName(), "12-4-2015"))
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(dayMenu -> {
-                    Timber.i("Have a dayMenu for %s", dayMenu.getLocation());
-                })
-                .collect(() -> new ArrayList<DayMenu>(), ArrayList::add)
-                .subscribe(dayMenus -> {
-                    CurrentMealCollection currentMeals = new CurrentMealCollection();
-                    for (DayMenu menu : dayMenus) {
-                        Timber.d("I have a completed menu for %s", menu.getLocation());
-                        currentMeals.addFromDayMenu(menu, DateTime.now());
-                    }
-                    Meal currentMeal = currentMeals.getCurrentMeal();
-                    if(currentMeal != null) {
-                        EventBus.getBus().post(new MealChosenEvent(currentMeal.getName()));
-                    } else {
-                        NextMealsCollection nextMeals = new NextMealsCollection();
-                        for (DayMenu menu : dayMenus) {
-                            Timber.d("I have a completed menu for %s", menu.getLocation());
-                            nextMeals.addFromDayMenu(menu, DateTime.now());
-                        }
-                        Meal nextMeal = nextMeals.getNextMeal();
-                        if(nextMeal != null) {
-                            EventBus.getBus().post(new MealChosenEvent(nextMeal.getName()));
-                        } else {
-                            Timber.w("There were no current or next meals, displaying tomorrow's breakfast instead");
-                            EventBus.getBus().post(new ShowSnackbarEvent("All meals are closed for the day, here's tomorrow's Breakfast"));
-                            EventBus.getBus().post(new DateChosenEvent(LocalDate.now().plusDays(1)));
-                            EventBus.getBus().post(new MealChosenEvent("Breakfast"));
-                        }
-                    }
-                }, throwable -> {
-                    Timber.e(throwable, "An error was thrown in RxJava or Retrofit.");
-                    EventBus.getBus().post(new ShowSnackbarEvent("There was an error choosing a meal based on the time"));
-                    EventBus.getBus().post(new DateChosenEvent(LocalDate.now()));
-                    EventBus.getBus().post(new MealChosenEvent("Breakfast"));
-                });
-    }
 
     @Subscribe @SuppressWarnings("unused")
     public void dateChosen(DateChosenEvent event) {
