@@ -205,8 +205,6 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
             return;
         }
 
-        setViewMealHasData();
-
         if (mMeal.startsAfter(LocalTime.now())) {
             setHoursDisplayText(mMeal.getName() + " opens at " + mMeal.getHours().getStartLocalTime().toString("HH:mm"));
         } else if (mMeal.containsTime(LocalTime.now())) {
@@ -218,6 +216,8 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
         mFoodItems = mMeal.getAllUniqueFoodItems();
         Log.d(TAG, "There are (" + mFoodItems.size() + ") total foods.");
         setAdapterForFoodItems();
+
+        setViewMealHasData();
     }
 
     private void setViewMealHasData() {
