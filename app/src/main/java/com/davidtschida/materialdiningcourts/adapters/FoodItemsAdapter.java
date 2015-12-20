@@ -22,6 +22,7 @@ import timber.log.Timber;
  */
 public class FoodItemsAdapter extends RecyclerView.Adapter<FoodItemsAdapter.ViewHolder> {
 
+    private final SharedPreferences mSharedPreferences;
     private List<FoodItem> mFoodsList;
     private Context mContext;
     private int favoriteCount;
