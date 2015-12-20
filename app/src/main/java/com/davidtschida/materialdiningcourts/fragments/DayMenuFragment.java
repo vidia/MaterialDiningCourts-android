@@ -107,17 +107,6 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
         mDiningCourt = getArguments().getString(ARG_DININGCOURT_NAME);
         mSharedPreferences = getActivity().getSharedPreferences("FAVORITES", Context.MODE_PRIVATE);
 
-//        SharedPreferences.OnSharedPreferenceChangeListener spChanged = new
-//                SharedPreferences.OnSharedPreferenceChangeListener() {
-//                    @Override
-//                    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-//                                                          String key) {
-//                        Timber.e("SHARED PREFERENCES WERE CHANGED!!!!");
-//                        refreshList();
-//                    }
-//                };
-//        mSharedPreferences.registerOnSharedPreferenceChangeListener(spChanged);
-
         if (mDiningCourt == null) {
             //We need all this information to run this fragment properly.
             throw new RuntimeException("Arguments that are required for this fragment were not provided.");
@@ -182,7 +171,6 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
         List<FoodItem> otherFoodItems = new ArrayList<>();
         for(int i = 0; i < mFoodItems.size(); i++) {
             if(mFoodItems.get(i).isFavorite(mSharedPreferences)) {
-                Timber.e(mFoodItems.get(i).getName() + " is a favorite!");
                 favoriteFoodItems.add(mFoodItems.get(i));
             } else {
                 otherFoodItems.add(mFoodItems.get(i));
@@ -193,13 +181,6 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
         mSortedFoodItems.addAll(favoriteFoodItems);
         mSortedFoodItems.addAll(otherFoodItems);
         return favoriteFoodItems.size();
-    }
-
-    public void refreshList() {
-        sortFoodItems();
-        mFoodItemsAdapter.notifyDataSetChanged();
-        //mFoodItemsAdapter = new FoodItemsAdapter(getActivity().getApplicationContext(), mSortedFoodItems);
-        //mEntreeItemsRecycleView.setAdapter(mFoodItemsAdapter);
     }
 
     private void refreshDisplayText() {
