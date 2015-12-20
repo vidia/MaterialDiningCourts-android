@@ -28,14 +28,16 @@ public class FoodItemsAdapter extends RecyclerView.Adapter<FoodItemsAdapter.View
     private final SharedPreferences mSharedPreferences;
     private List<FoodItem> mFoodsList;
     private Context mContext;
-    IconDrawable redHeart, greyHeart;
+    private int favoriteCount;
+    //IconDrawable redHeart, greyHeart;
 
 
-    public FoodItemsAdapter(Context context, List<FoodItem> foods) {
+    public FoodItemsAdapter(Context context, List<FoodItem> foods, int favoriteCount) {
         this.mFoodsList = foods;
         this.mContext = context;
-        redHeart = new IconDrawable(mContext, FontAwesomeIcons.fa_heart).colorRes(R.color.favoriteColor).sizeDp(24);
-        greyHeart = new IconDrawable(mContext, FontAwesomeIcons.fa_heart).colorRes(R.color.favoriteNotSelected).sizeDp(24);
+        this.favoriteCount = favoriteCount;
+        //redHeart = new IconDrawable(mContext, FontAwesomeIcons.fa_heart).colorRes(R.color.favoriteColor).sizeDp(24);
+        //greyHeart = new IconDrawable(mContext, FontAwesomeIcons.fa_heart).colorRes(R.color.favoriteNotSelected).sizeDp(24);
 
         this.mSharedPreferences = mContext.getSharedPreferences("FAVORITES", Context.MODE_PRIVATE);
     }
@@ -64,36 +66,72 @@ public class FoodItemsAdapter extends RecyclerView.Adapter<FoodItemsAdapter.View
             holder.mRootView.setBackgroundResource(R.color.foodItemBackgroundColorEven);
         }
         holder.mTextView.setText(mFoodsList.get(position).getName());
-        holder.mFavoritesButton.setChecked(mSharedPreferences
-                .getBoolean(mFoodsList.get(position).getId(), false));
+        holder.mFavoritesButton.setChecked(mFoodsList.get(position).isFavorite(mSharedPreferences));
+        //holder.mFavoritesButton.setBackgroundDrawable(null);
 
-        holder.mFavoritesButton.setBackgroundDrawable(null);
+//        if(mFoodsList.get(position).isFavorite(mSharedPreferences)) {
+//            Timber.d("Heart is on: %s", mFoodsList.get(position).getName());
+//            //holder.mFavoritesButton.setButtonDrawable(redHeart);
+//        } else {
+//            Timber.d("Heart is off: %s", mFoodsList.get(position).getName());
+//            //holder.mFavoritesButton.setButtonDrawable(greyHeart);
+//        }
 
-        if(holder.mFavoritesButton.isChecked()) {
-            Timber.d("Heart is on: %s", mFoodsList.get(position).getName());
-            holder.mFavoritesButton.setButtonDrawable(redHeart);
-        } else {
-            Timber.d("Heart is off: %s", mFoodsList.get(position).getName());
-            holder.mFavoritesButton.setButtonDrawable(greyHeart);
-        }
+//        holder.mFavoritesButton.setOnCheckedChangeListener(
+//                new CompoundButton.OnCheckedChangeListener() {
+//                    @Override
+//                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                        Timber.e("Clicked: " + mFoodsList.get(position).getName());
+//                        mFoodsList.get(position).setFavorite(mSharedPreferences, isChecked);
+//                        FoodItem f = mFoodsList.remove(position);
+//                        mFoodsList.add(0, f);
+//                        notifyItemMoved(position, 0);
+//                        notifyItemRangeChanged(0, mFoodsList.size());
+////                        mSharedPreferences
+////                                .edit()
+////                                .putBoolean(mFoodsList.get(position).getId(), isChecked)
+////                                .apply();
+////                        if(isChecked) {
+////                            Timber.d("Heart is on: %s", mFoodsList.get(position).getName());
+////                            buttonView.setButtonDrawable(redHeart);
+////                        } else {
+////                            Timber.d("Heart is off: %s", mFoodsList.get(position).getName());
+////                            buttonView.setButtonDrawable(greyHeart);
+////                        }
+//                    }
+//                });
 
-        holder.mFavoritesButton.setOnCheckedChangeListener(
-                new CompoundButton.OnCheckedChangeListener() {
+        holder.mFavoritesButton.setOnClickListener(
+                new ToggleButton.OnClickListener() {
                     @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        mSharedPreferences
-                                .edit()
-                                .putBoolean(mFoodsList.get(position).getId(), isChecked)
-                                .apply();
-                        if(isChecked) {
-                            Timber.d("Heart is on: %s", mFoodsList.get(position).getName());
-                            buttonView.setButtonDrawable(redHeart);
+                    public void onClick(View v) {
+                        boolean favorite = !(mFoodsList.get(position).isFavorite(mSharedPreferences));
+                        mFoodsList.get(position).setFavorite(mSharedPreferences, favorite);
+                        FoodItem item = mFoodsList.remove(position);
+                        if(favorite) {
+                            int i;
+                            for(i = 0; i < favoriteCount; i++) {
+                                if(mFoodsList.get(i).getPosition() > item.getPosition()) {
+                                    break;
+                                }
+                            }
+                            favoriteCount++;
+                            mFoodsList.add(i, item);
                         } else {
-                            Timber.d("Heart is off: %s", mFoodsList.get(position).getName());
-                            buttonView.setButtonDrawable(greyHeart);
+                            favoriteCount--;
+                            int i;
+                            for(i = favoriteCount; i < mFoodsList.size(); i++) {
+                                if(mFoodsList.get(i).getPosition() > item.getPosition()) {
+                                    break;
+                                }
+                            }
+                            mFoodsList.add(i, item);
                         }
+                        notifyItemMoved(0, mFoodsList.get(position).getPosition());
+                        notifyItemRangeChanged(0, mFoodsList.size());
                     }
-                });
+                }
+        );
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -101,6 +139,8 @@ public class FoodItemsAdapter extends RecyclerView.Adapter<FoodItemsAdapter.View
     public int getItemCount() {
         return mFoodsList.size();
     }
+
+
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and

@@ -1,5 +1,7 @@
 package com.davidtschida.materialdiningcourts.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +27,7 @@ import com.squareup.otto.Subscribe;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -58,11 +61,14 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
     @Bind(R.id.progressTitle)
     protected TextView mProgressText;
 
+    private SharedPreferences mSharedPreferences;
+
     private String mDiningCourt;
     private LocalDate mLocalDate;
 
     private Meal mMeal;
     private List<FoodItem> mFoodItems;
+    private List<FoodItem> mSortedFoodItems;
     private FoodItemsAdapter mFoodItemsAdapter;
     private String mHoursDisplayText;
     private String mMealString;
@@ -99,6 +105,18 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDiningCourt = getArguments().getString(ARG_DININGCOURT_NAME);
+        mSharedPreferences = getActivity().getSharedPreferences("FAVORITES", Context.MODE_PRIVATE);
+
+//        SharedPreferences.OnSharedPreferenceChangeListener spChanged = new
+//                SharedPreferences.OnSharedPreferenceChangeListener() {
+//                    @Override
+//                    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+//                                                          String key) {
+//                        Timber.e("SHARED PREFERENCES WERE CHANGED!!!!");
+//                        refreshList();
+//                    }
+//                };
+//        mSharedPreferences.registerOnSharedPreferenceChangeListener(spChanged);
 
         if (mDiningCourt == null) {
             //We need all this information to run this fragment properly.
@@ -151,10 +169,37 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
     }
 
     private void setAdapterForFoodItems() {
-        if (mFoodItems != null && mFoodItems.size() > 0) {
-            mFoodItemsAdapter = new FoodItemsAdapter(getActivity().getApplicationContext(), mFoodItems);
+        mSortedFoodItems = new ArrayList<>();
+        int favoriteCount = sortFoodItems();
+        if (mSortedFoodItems != null && mSortedFoodItems.size() > 0) {
+            mFoodItemsAdapter = new FoodItemsAdapter(getActivity().getApplicationContext(), mSortedFoodItems, favoriteCount);
         }
         mEntreeItemsRecycleView.setAdapter(mFoodItemsAdapter);
+    }
+
+    private int sortFoodItems() {
+        List<FoodItem> favoriteFoodItems = new ArrayList<>();
+        List<FoodItem> otherFoodItems = new ArrayList<>();
+        for(int i = 0; i < mFoodItems.size(); i++) {
+            if(mFoodItems.get(i).isFavorite(mSharedPreferences)) {
+                Timber.e(mFoodItems.get(i).getName() + " is a favorite!");
+                favoriteFoodItems.add(mFoodItems.get(i));
+            } else {
+                otherFoodItems.add(mFoodItems.get(i));
+            }
+            mFoodItems.get(i).setPosition(i);
+        }
+        mSortedFoodItems.clear();
+        mSortedFoodItems.addAll(favoriteFoodItems);
+        mSortedFoodItems.addAll(otherFoodItems);
+        return favoriteFoodItems.size();
+    }
+
+    public void refreshList() {
+        sortFoodItems();
+        mFoodItemsAdapter.notifyDataSetChanged();
+        //mFoodItemsAdapter = new FoodItemsAdapter(getActivity().getApplicationContext(), mSortedFoodItems);
+        //mEntreeItemsRecycleView.setAdapter(mFoodItemsAdapter);
     }
 
     private void refreshDisplayText() {
@@ -186,6 +231,11 @@ public class DayMenuFragment extends Fragment implements Callback<DayMenu> {
 
     @Override
     public void onResponse(Response<DayMenu> response, Retrofit retrofit) {
+        if(response == null || response.body() == null) {
+            Timber.e("The response doesn't have a body!");
+            return;
+        }
+
         Log.d(TAG, "Got a response for the menu");
 
         if(getView() == null) {
