@@ -1,5 +1,6 @@
 package com.davidtschida.materialdiningcourts.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.davidtschida.materialdiningcourts.R;
 import com.davidtschida.materialdiningcourts.adapters.DiningCourtPagerAdapter;
@@ -151,6 +153,18 @@ public class MealViewActivity extends NavDrawerActivity
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getBus().unregister(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch(item.getItemId()) {
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
+
+
     }
 
     @Override
