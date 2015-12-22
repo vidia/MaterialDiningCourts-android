@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import lombok.Data;
@@ -42,6 +43,14 @@ public class Meal {
             foodItems.addAll(station.getItems());
         }
         return foodItems;
+    }
+
+    public List<FoodItem> getAllUniqueFoodItems() {
+        LinkedHashSet<FoodItem> foodItems = new LinkedHashSet<>();
+        for (Station station : getStations()) {
+            foodItems.addAll(station.getItems());
+        }
+        return new ArrayList<>(foodItems);
     }
 
     /**

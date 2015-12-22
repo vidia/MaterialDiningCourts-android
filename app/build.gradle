@@ -1,16 +1,21 @@
 apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "com.davidtschida.materialdiningcourts"
-        minSdkVersion 21
+        minSdkVersion 16
         targetSdkVersion 23
-        versionCode 5
-        versionName "0.4"
+        versionCode 6
+        versionName "0.4.1"
     }
     buildTypes {
         release {
@@ -23,21 +28,33 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.0'
-    compile 'com.android.support:design:23.1.0'
-    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2' //For creating an API client
-    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
-    compile 'com.android.support:recyclerview-v7:23.1.0'
-    compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.1.0'
-    compile 'com.joanzapata.iconify:android-iconify-material:2.1.0' // (v2.0.0)
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
+
     //For icons like the favorites heart
+    compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.1.1'
+    compile 'com.joanzapata.iconify:android-iconify-material:2.1.1' // (v2.0.0)
+
     compile 'net.danlew:android.joda:2.9.0' //Because android and java time classes suck
+
     provided "org.projectlombok:lombok:1.16.4" //For annotations like @Data to help with POJOs
     //Install this to use the following: https://bitbucket.org/hvisser/android-apt
     //apt "org.projectlombok:lombok:1.16.4"
+
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.jakewharton.timber:timber:4.1.0'
+
+    /*
+    Retrofit and converters. These versions must match.
+     */
+    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2' //For creating an API client
+    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
+    compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
     compile 'com.squareup:otto:1.3.8'
+
+    compile 'io.reactivex:rxandroid:1.0.1'
+    compile 'io.reactivex:rxjava:1.0.16'
 }
 
 configurations {
