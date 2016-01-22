@@ -15,8 +15,6 @@ import com.davidtschida.purduemenu.models.FoodItem;
 
 import java.util.List;
 
-import timber.log.Timber;
-
 /**
  * Created by david on 11/3/2015.
  */
@@ -32,7 +30,7 @@ public class FoodItemsAdapter extends RecyclerView.Adapter<FoodItemsAdapter.View
         this.mContext = context;
         this.favoriteCount = favoriteCount;
 
-        this.mSharedPreferences = mContext.getSharedPreferences("FAVORITES", Context.MODE_PRIVATE);
+        this.mSharedPreferences = mContext.getSharedPreferences("FAVORITES", Context.MODE_PRIVATE); //TODO: Move this to a static "SharesPrefsManager"
     }
 
     // Create new views (invoked by the layout manager)
@@ -77,6 +75,7 @@ public class FoodItemsAdapter extends RecyclerView.Adapter<FoodItemsAdapter.View
                             }
                             favoriteCount++;
                             mFoodsList.add(i, item);
+                            notifyItemMoved(position, i);
                         } else {
                             favoriteCount--;
                             int i;
@@ -86,9 +85,11 @@ public class FoodItemsAdapter extends RecyclerView.Adapter<FoodItemsAdapter.View
                                 }
                             }
                             mFoodsList.add(i, item);
+                            notifyItemMoved(position, i);
                         }
-                        notifyItemMoved(0, mFoodsList.get(position).getPosition());
-                        notifyItemRangeChanged(0, mFoodsList.size());
+                        //notifyDataSetChanged();
+                        //notifyItemMoved(0, mFoodsList.get(position).getPosition());
+                        notifyItemRangeChanged(0, mFoodsList.size()); //Why does this work? IS this the intended use?
                     }
                 }
         );
