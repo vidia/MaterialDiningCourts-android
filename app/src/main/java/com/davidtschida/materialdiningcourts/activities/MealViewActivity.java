@@ -9,8 +9,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
+import com.davidtschida.materialdiningcourts.BuildConfig;
 import com.davidtschida.materialdiningcourts.R;
 import com.davidtschida.materialdiningcourts.adapters.DiningCourtPagerAdapter;
+import com.davidtschida.materialdiningcourts.datalogging.FoodItemTypeChangedManager;
 import com.davidtschida.materialdiningcourts.eventbus.DateChosenEvent;
 import com.davidtschida.materialdiningcourts.eventbus.EventBus;
 import com.davidtschida.materialdiningcourts.eventbus.MealChosenEvent;
@@ -77,6 +79,9 @@ public class MealViewActivity extends NavDrawerActivity
         if(mLastMealEvent == null) {
             new DefaultMealChooser().initiateDefaultMealSelection();
         }
+
+        EventBus.getBus().post(new ShowSnackbarEvent("Build Flavor: " + BuildConfig.FLAVOR));
+
     }
 
     @Subscribe @SuppressWarnings("unused")
@@ -157,6 +162,14 @@ public class MealViewActivity extends NavDrawerActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_meal_view, menu);
+
+        if(BuildConfig.FLAVOR.equals("datalogger")) {
+            menu.add("Export food type data").setOnMenuItemClickListener(item -> {
+                FoodItemTypeChangedManager.getInstance(this).exportToEmail(MealViewActivity.this);
+                return true;
+            });
+        }
+
         return true;
     }
 }

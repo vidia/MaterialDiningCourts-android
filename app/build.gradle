@@ -12,15 +12,32 @@ android {
 
     defaultConfig {
         applicationId "com.davidtschida.materialdiningcourts"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 23
         versionCode 6
         versionName "0.4.1"
     }
+    productFlavors {
+        datalogger {
+            applicationId "com.davidtschida.materialdiningcourts.datalogger"
+            resValue "string", "app_name", "Purdue Dining Courts Datalogger"
+        }
+        production {
+            applicationId "com.davidtschida.materialdiningcourts"
+//            buildConfigField 'String', 'FLAVOR', '"production"'
+            resValue "string", "app_name", "Purdue Dining Courts"
+        }
+    }
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix '-DEBUG'
+            resValue "string", "app_name", "Purdue Dining Courts Debug"
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue "string", "app_name", "Purdue Dining Courts"
         }
     }
 }

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
+
+    <TextView
+        android:id="@+id/simpleItemTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:textSize="16sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        tools:text="Hamburgers" />
+
+    <ToggleButton
+        android:id="@+id/favoritesHeart"
+        android:layout_height="24dp"
+        android:layout_width="24dp"
+        android:layout_alignParentEnd="true"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:textOn=""
+        android:textOff=""
+        android:background="@drawable/heart"/>
+
+    <TextView
+        android:id="@+id/favoritesCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textSize="13sp"
+        tools:text="13"
+        android:paddingEnd="3dp"
+        android:textColor="@color/favoriteNotSelected"
+        android:layout_toStartOf="@+id/favoritesHeart" />
+
+    <ToggleButton
+        android:id="@+id/desertButton"
+        android:layout_height="24dp"
+        android:layout_width="24dp"
+        android:layout_toStartOf="@+id/favoritesCount"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_marginEnd="15dp"
+        android:textOff=""
+        android:textOn=""
+        android:background="@drawable/desert"/>
+    <ToggleButton
+        android:id="@+id/sideButton"
+        android:layout_height="24dp"
+        android:layout_width="24dp"
+        android:layout_toStartOf="@+id/desertButton"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_marginEnd="15dp"
+        android:textOff=""
+        android:textOn=""
+        android:background="@drawable/side"/>
+    <ToggleButton
+        android:id="@+id/entreeButton"
+        android:layout_height="24dp"
+        android:layout_width="24dp"
+        android:layout_toStartOf="@+id/sideButton"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_marginEnd="15dp"
+        android:textOff=""
+        android:textOn=""
+        android:background="@drawable/entree"/>
+
+</RelativeLayout>
