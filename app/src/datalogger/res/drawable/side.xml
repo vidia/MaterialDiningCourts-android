@@ -4,7 +4,7 @@
     <item android:drawable="@drawable/broccoli"
         android:state_checked="true" />
     <!-- When not selected, use grey -->
-    <item android:drawable="@drawable/broccoli_gery"
+    <item android:drawable="@drawable/broccoli_grey"
         android:state_checked="false"/>
 
 </selector>
