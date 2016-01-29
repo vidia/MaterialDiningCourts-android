@@ -1,10 +1,20 @@
+/*
+Automatically downloads the required Android SDKs and tools needed based on the versions
+listed in gradle.
+ */
 apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
+/*
+Allows Java8-esque lambdas to be used in Android.
+ */
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 23
     compileOptions {
+        /*
+        Required by retrolambda.
+         */
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -27,32 +37,71 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    /*
+    Testing framework.
+     */
     testCompile 'junit:junit:4.12'
+    /*
+    Support libraries for android compatibilities.
+     */
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
 
-    //For icons like the favorites heart
+    /*
+    Iconify bakes in icons from fontawesome and material and more and can be added as
+    custom views and even inline text in a textview.
+     */
     compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.1.1'
     compile 'com.joanzapata.iconify:android-iconify-material:2.1.1' // (v2.0.0)
 
-    compile 'net.danlew:android.joda:2.9.0' //Because android and java time classes suck
+    /*
+    Jodatime has better time management than the official Java time libraries.
+    Allows for easier logic in choosing what meals to display at what times.
+     */
+    compile 'net.danlew:android.joda:2.9.0'
 
-    provided "org.projectlombok:lombok:1.16.4" //For annotations like @Data to help with POJOs
-    //Install this to use the following: https://bitbucket.org/hvisser/android-apt
+    /*
+    Provides a set of convenience annotations. Such as @Data to generate get/setters.
+     */
+    provided "org.projectlombok:lombok:1.16.4"
+
+    /*
+    Install this to use the following: https://bitbucket.org/hvisser/android-apt
+    Currently I am not completely sure what this second dep would get me. It was recommended
+    to be installed with the above lombok dep.
+    */
     //apt "org.projectlombok:lombok:1.16.4"
 
+    /*
+    Butterknife adds @ViewById and other view binding code to remove boilerplate.
+     */
     compile 'com.jakewharton:butterknife:7.0.1'
+
+    /*
+    Robust logging library which allows logs to be sent conditionally to different places.
+     */
     compile 'com.jakewharton.timber:timber:4.1.0'
 
     /*
     Retrofit and converters. These versions must match.
+    Retrofit adds RESTful API Client creation from a Java interface as well as JSON<->POJO
+    converting.
      */
-    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2' //For creating an API client
+    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
     compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
-    compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
+    compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2' //see below
+
+    /*
+    Event bus library allowing events to be sent across the application.
+    Helps to clean up code so that for example Contexts do not need to be passed around.
+     */
     compile 'com.squareup:otto:1.3.8'
 
+    /*
+    Reactive libraries. Adds the ability to create a pipeline for data conversions and operations.
+    Is being used with retrofit to process food data from the API.
+     */
     compile 'io.reactivex:rxandroid:1.0.1'
     compile 'io.reactivex:rxjava:1.0.16'
 }
