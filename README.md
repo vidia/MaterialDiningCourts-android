@@ -5,6 +5,8 @@ want to look for food.
 
 This app aims to change that!
 
+![Drawer Screen](screenshots/MAterial Dining Drawer.png) ![Main Screen](screenshots/Material Dining Main.png)
+
 ## Features
 
 ### Choosing a dining court
